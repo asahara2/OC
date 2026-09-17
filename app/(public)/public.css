@@ -30,12 +30,27 @@
 .oc-wordmark small { display: block; margin-top: 4px; color: var(--oc-muted); font-size: 8px; letter-spacing: .25em; }
 .oc-navigation { display: flex; align-items: center; gap: clamp(22px, 3vw, 46px); }
 .oc-navigation > a { position: relative; font-size: 11px; letter-spacing: .07em; color: #d2cbd1; padding: 16px 0; transition: color .25s; }
+.oc-nav-share { appearance: none; border: 0; padding: 16px 0; color: #d2cbd1; background: transparent; font-size: 11px; letter-spacing: .07em; transition: color .25s; }
+.oc-nav-share:hover { color: var(--oc-pink); }
 .oc-navigation > a > small { display: none; }
 .oc-navigation > a:hover, .oc-navigation > a[aria-current="page"] { color: var(--oc-pink); }
 .oc-navigation > a:not(.oc-nav-join)::after { content: ""; position: absolute; bottom: 9px; left: 0; width: 100%; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .3s; }
 .oc-navigation > a:hover::after { transform: scaleX(1); }
 .oc-navigation .oc-nav-join { display: flex; align-items: center; gap: 25px; padding: 12px 18px; border: 1px solid #ffffff36; border-radius: 3px; }
 .oc-nav-join svg { width: 15px; }
+.oc-share-dialog { width: min(440px, calc(100vw - 32px)); padding: 31px; color: #eee5eb; background: linear-gradient(145deg, #1d111c, #0b090e); border: 1px solid #e3bfd338; box-shadow: 0 35px 120px #000c; }
+.oc-share-dialog::backdrop { background: #050408b8; backdrop-filter: blur(7px); }
+.oc-share-dialog form { display: flex; justify-content: flex-end; }
+.oc-dialog-close { border: 0; padding: 0; color: #cbb6c6; background: transparent; font-size: 10px; letter-spacing: .09em; }
+.oc-share-dialog h2 { margin: 15px 0 13px; font-size: 28px; letter-spacing: .04em; }
+.oc-share-dialog > p:not(.oc-eyebrow) { margin-bottom: 23px; color: #b9abb7; font-size: 12px; line-height: 1.9; }
+.oc-qr-surface { display: grid; min-height: 240px; place-items: center; margin: 0 auto 19px; padding: 10px; background: #fff9fc; }
+.oc-qr-surface img { display: block; width: 240px; max-width: 100%; height: auto; }
+.oc-qr-surface span { color: #30202d; font-size: 12px; }
+.oc-share-dialog code { display: block; overflow: hidden; color: #d6c5d0; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.oc-share-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.oc-share-actions button { border: 1px solid #e7c6dc55; padding: 11px 13px; color: #f4e8f0; background: #e3adca12; font-size: 10px; letter-spacing: .06em; }
+.oc-share-actions .oc-share-native { border-color: #d891b6; color: #1c0f18; background: #e9bdd4; }
 .public-site .oc-menu-toggle { display: none; background: transparent; border: 0; width: 44px; height: 44px; padding: 12px 8px; }
 .oc-home { position: relative; }
 .oc-home > section, .oc-manifesto-strip { position: relative; z-index: 2; }
@@ -219,6 +234,7 @@
   .oc-navigation { display: none; position: absolute; top: 78px; left: 0; right: 0; padding: 22px 7vw 35px; background: #0e0a12; border-bottom: 1px solid #ffffff24; }
   .oc-header[data-open="true"] .oc-navigation { display: flex; flex-direction: column; align-items: stretch; gap: 3px; }
   .oc-navigation > a { font-size: 16px; padding: 16px 0; }
+  .oc-nav-share { width: 100%; padding: 16px 0; text-align: left; font-size: 16px; }
   .oc-navigation > a > small { display: inline; margin-right: 25px; font-size: 9px; color: #af85a2; }
   .oc-navigation .oc-nav-join { margin-top: 20px; justify-content: space-between; padding: 16px; font-size: 12px; }
   .oc-hero h1 { font-size: 69px; }

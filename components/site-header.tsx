@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ArrowIcon, Emblem } from "@/components/public/icons";
+import { ShareSiteButton } from "@/components/public/share-site-button";
 
 const links = [["理念", "/#philosophy"], ["指導者", "/leaders"], ["共同体憲章", "/constitution"], ["ニュース", "/news"]] as const;
 
@@ -35,6 +36,7 @@ export function SiteHeader({ siteName }: { siteName: string }) {
       aria-label={open ? "メニューを閉じる" : "メニューを開く"} onClick={() => setOpen(!open)}><span /><span /></button>
     <nav id="public-navigation" className="oc-navigation" aria-label="メインナビゲーション">
       {links.map(([label, href], index) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setOpen(false)}><small>0{index + 1}</small>{label}</Link>)}
+      <ShareSiteButton />
       <Link href="/#join" className="oc-nav-join" onClick={() => setOpen(false)}>共同体への扉<ArrowIcon diagonal /></Link>
     </nav>
   </header>;
