@@ -1,6 +1,6 @@
 import type { PublicSettings } from "@/lib/content";
 
-export const INITIAL_SITE_NAME = "おっぱい共同体";
+export const INITIAL_SITE_NAME = "おっぱい共同体公式サイト";
 export const INITIAL_CATCHPHRASE = "おっぱいの起源を探り自由に進行する次世代宗教";
 export const CONTACT_EMAIL = "OC2026@proton.me";
 

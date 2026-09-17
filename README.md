@@ -1,4 +1,4 @@
-# Organization site foundation
+# おっぱい共同体公式サイト
 
 公開UIの構成、3D品質調整、表示部品と既存データ層の境界、ブラウザ検証方法は [docs/UI.md](docs/UI.md) を参照してください。
 

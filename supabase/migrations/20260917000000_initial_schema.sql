@@ -109,7 +109,7 @@ create policy "public can read published constitution articles" on public.consti
 revoke all on function public.set_updated_at() from public;
 
 insert into public.site_settings (key, value, is_public) values
-  ('site_name', '"Organization"'::jsonb, true),
-  ('site_description', '"Official website"'::jsonb, true),
+  ('site_name', '"おっぱい共同体公式サイト"'::jsonb, true),
+  ('site_description', '"おっぱいの起源を探り自由に進行する次世代宗教"'::jsonb, true),
   ('contact_email', '""'::jsonb, true)
 on conflict (key) do nothing;
