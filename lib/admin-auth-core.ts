@@ -1,6 +1,8 @@
 function configuredCredentials() {
-  const username = process.env.ADMIN_USERNAME;
-  const password = process.env.ADMIN_PASSWORD;
+  // Bracket access intentionally keeps this runtime-configurable on Vercel.
+  // Direct process.env.NAME access may otherwise be replaced during the build.
+  const username = process.env["ADMIN_USERNAME"];
+  const password = process.env["ADMIN_PASSWORD"];
   return username && password ? `${username}:${password}` : null;
 }
 
