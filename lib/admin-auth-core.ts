@@ -6,6 +6,13 @@ function configuredCredentials() {
   return username && password ? `${username}:${password}` : null;
 }
 
+function missingCredentialNames() {
+  return [
+    !process.env.ADMIN_USERNAME && "ADMIN_USERNAME",
+    !process.env.ADMIN_PASSWORD && "ADMIN_PASSWORD",
+  ].filter(Boolean).join(", ");
+}
+
 async function digest(value: string) {
   return new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value)));
 }
@@ -35,7 +42,7 @@ export function adminIsConfigured() {
 
 export function adminAuthenticationResponse() {
   if (!adminIsConfigured()) {
-    return new Response("Admin authentication is not configured.", { status: 503 });
+    return new Response(`Admin authentication is not configured. Missing: ${missingCredentialNames()}.`, { status: 503 });
   }
 
   return new Response("Authentication required.", {
