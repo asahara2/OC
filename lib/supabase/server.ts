@@ -19,7 +19,13 @@ function publicConfig() {
     ?? runtimeEnv("SUPABASE_PUBLISHABLE_KEY");
 
   if (!url || !anonKey) {
-    throw new Error("Supabase public environment variables are not configured.");
+    // Never include values in an error. Identifying names is safe and makes a
+    // deployment misconfiguration diagnosable from Vercel Function logs.
+    const missing = [
+      !url && "NEXT_PUBLIC_SUPABASE_URL (or SUPABASE_URL)",
+      !anonKey && "NEXT_PUBLIC_SUPABASE_ANON_KEY (or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)",
+    ].filter(Boolean).join(", ");
+    throw new Error(`Supabase public environment variables are not configured: ${missing}.`);
   }
 
   return { url, anonKey };
