@@ -15,6 +15,11 @@ const database = {
 createServer(async (request, response) => {
   const url = new URL(request.url, "http://127.0.0.1:54329");
   if (url.pathname === "/health") { response.end("ok"); return; }
+  if (url.pathname === "/portrait.svg") {
+    response.setHeader("Content-Type", "image/svg+xml");
+    response.end('<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640"><rect width="480" height="640" fill="#191220"/><circle cx="240" cy="215" r="98" fill="#997d92"/><path d="M80 590v-95a160 160 0 0 1 320 0v95" fill="#5b465e"/><text x="240" y="620" fill="#dbc0d5" text-anchor="middle" font-size="14">UI TEST PORTRAIT — NOT A REAL PERSON</text></svg>');
+    return;
+  }
   if (url.pathname === "/__scenario" && request.method === "POST") {
     const chunks = []; for await (const chunk of request) chunks.push(chunk);
     scenario = JSON.parse(Buffer.concat(chunks).toString()).scenario;
@@ -30,6 +35,8 @@ createServer(async (request, response) => {
       { key: "contact_email", value: "", is_public: true },
     ];
   } else if (scenario !== "empty") data = database[table] ?? [];
+  if (scenario === "journey" && table === "leaders") data = data.map((leader) => ({ ...leader, image_url: "http://127.0.0.1:54329/portrait.svg" }));
+  if (scenario === "journey" && table === "constitution_articles") data = Array.from({ length: 3 }, (_, index) => ({ ...database.constitution_articles[0], id: `article-${index}`, article_number: index + 1, title: ["自由への問い", "異なる声の共存", "対話からはじまる平和"][index], content: index === 1 ? "これはUI検証専用の長い本文です。本文は省略せず、検索・選択できるHTMLとして保持します。\n".repeat(8) : database.constitution_articles[0].content }));
   if (url.searchParams.has("slug")) data = data.filter((item) => item.slug === url.searchParams.get("slug").replace(/^eq\./, ""));
   if (url.searchParams.has("limit")) data = data.slice(0, Number(url.searchParams.get("limit")));
   response.setHeader("Content-Type", "application/json");

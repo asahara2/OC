@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { getPublicSettings } from "@/lib/content";
 import { publicIdentity } from "@/lib/presentation";
 import "./public.css";
+import "./journey.css";
 
 export const dynamic = "force-dynamic";
 

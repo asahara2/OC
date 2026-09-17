@@ -16,10 +16,12 @@ export default defineConfig({
   webServer: [
     { command: "node tests/ui/fixture-server.mjs", url: "http://127.0.0.1:54329/health", reuseExistingServer: false },
     {
-      command: "npm run start -- --hostname 127.0.0.1 --port 3035",
+      command: "node tests/ui/start-server.mjs",
+      timeout: 180000,
       url: "http://127.0.0.1:3035/news",
       reuseExistingServer: false,
       env: {
+        OC_UI_TEST: "1",
         NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54329",
         NEXT_PUBLIC_SUPABASE_ANON_KEY: "ui-test-anon-not-a-real-key",
         SUPABASE_SERVICE_ROLE_KEY: "ui-test-service-not-a-real-key",

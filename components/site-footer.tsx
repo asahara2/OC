@@ -3,7 +3,8 @@ import { ArrowIcon, Emblem } from "@/components/public/icons";
 import { CONTACT_EMAIL } from "@/lib/presentation";
 
 export function SiteFooter({ siteName, contactEmail }: { siteName: string; contactEmail: string }) {
-  return <footer className="oc-footer">
+  return <footer className="oc-footer" id="final-void">
+    <div className="oc-final-mark" aria-hidden="true"><span>OC</span><small>THE ORIGIN IS ONLY THE BEGINNING.</small></div>
     <div className="oc-footer-horizon" aria-hidden="true" />
     <div className="oc-footer-top">
       <div><Emblem /><p className="oc-footer-name">{siteName}</p><p className="oc-caption">OC新興宗教団体</p></div>

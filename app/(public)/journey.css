@@ -1,0 +1,220 @@
+/* One continuous world. These overrides apply only to the home experience;
+   document pages and the management UI keep their existing layouts. */
+.oc-journey { --spatial-offset: 0; background: transparent; }
+.oc-journey .oc-scene { background: radial-gradient(ellipse at 68% 45%, #130d17, #050507 65%); }
+.oc-journey .oc-scene-vignette { background: linear-gradient(90deg, #04040666, transparent 45%), radial-gradient(ellipse at 50% 46%, transparent 30%, #03030599); }
+.oc-journey .oc-origin-canvas { transition: opacity .8s ease; }
+.oc-entry { position: fixed; z-index: 60; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: #030305; pointer-events: none; animation: oc-enter-world .95s ease-out both; }
+.oc-entry > span { font-size: 32px; font-weight: 200; letter-spacing: .2em; margin-left: .2em; color: #e6d2df; }
+.oc-entry > small { font-size: 7px; letter-spacing: .4em; color: #987d95; }
+.oc-entry::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 53%, #a3539012, transparent 28%), radial-gradient(circle at 46% 57%, #caa9bf99 0 1px, transparent 2px), radial-gradient(circle at 61% 45%, #caa9bf66 0 1px, transparent 2px); }
+@keyframes oc-enter-world { 0%, 15% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+.oc-journey:focus-within .oc-entry { display: none; }
+.oc-journey-map { position: fixed; right: 22px; top: 50%; transform: translateY(-50%); z-index: 25; display: flex; flex-direction: column; gap: 0; }
+.oc-journey-map a { position: relative; width: 30px; height: 32px; display: grid; place-items: center; }
+.oc-journey-map i { width: 3px; height: 3px; border-radius: 50%; background: #8f7b91; transition: box-shadow .5s, background .5s; }
+.oc-journey-map a[aria-current="step"] i { background: #ffdded; box-shadow: 0 0 0 4px #e6b6d01a, 0 0 12px #edbad8; }
+.oc-journey-map span { opacity: 0; position: absolute; right: 34px; white-space: nowrap; padding: 6px 10px; background: #08070deb; color: #e6ccdf; font-size: 8px; letter-spacing: .15em; pointer-events: none; transition: opacity .25s; }
+.oc-journey-map a:hover span, .oc-journey-map a:focus-visible span { opacity: 1; }
+.oc-journey [data-spatial-panel] { transform: perspective(1500px) translate3d(0, calc(var(--spatial-offset, 0) * 12px), 0) rotateX(calc(var(--spatial-offset, 0) * -2deg)); transform-origin: 50% 50%; }
+.oc-journey .oc-hero { min-height: 820px; max-height: none; }
+.oc-journey .oc-hero-copy { width: min(690px, 59%); z-index: 2; }
+.oc-journey .oc-hero h1 { font-size: clamp(70px, 7.7vw, 126px); font-weight: 500; letter-spacing: -.06em; line-height: 1.25; text-shadow: 0 0 45px #dbb8d029, 0 8px 65px #000; }
+.oc-journey .oc-hero h1 > span { color: #e0cddc; }
+.oc-journey .oc-hero h1::after { content: ""; display: block; height: 1px; width: 54px; background: #e4b5d26b; margin-top: 26px; box-shadow: 0 0 18px #ffbadc55; }
+.oc-journey .oc-hero-description { color: #c6b9c7; }
+.oc-journey .oc-hero .oc-eyebrow { font-size: 9px; letter-spacing: .24em; }
+.oc-journey .oc-art-caption { right: 10%; bottom: 19%; }
+.oc-world-word { position: absolute; bottom: 5%; right: 3%; color: #e6cce505; font-size: 21vw; font-weight: 200; line-height: 1; letter-spacing: -.07em; pointer-events: none; }
+.oc-chamber { position: relative; min-height: 115svh; padding: 22svh 10vw; }
+.oc-chamber h2 { font-size: clamp(40px, 4.8vw, 72px); line-height: 1.5; margin: 25px 0; font-weight: 400; }
+.oc-chamber-description { color: #b9acbf; font-size: 13px; line-height: 2.4; }
+.oc-chamber .oc-eyebrow { font-size: 9px; }
+.oc-core-chamber { min-height: 140svh; padding-top: 23svh; }
+.oc-chamber-heading { margin-left: 2vw; width: min(540px, 58%); }
+.oc-spatial-principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5vw; margin-top: 21svh; }
+.oc-spatial-principles > div:nth-child(2) { margin-top: 55px; }
+.oc-spatial-principles > div:nth-child(3) { margin-top: 110px; }
+.oc-spatial-principles h3 { font-size: clamp(40px, 4.8vw, 70px); font-weight: 300; margin: 22px 0; letter-spacing: .08em; }
+.oc-spatial-principles p { font-size: 12px; color: #b9acbf; }
+.oc-chamber-exit { margin-top: 55px; }
+.oc-journey .oc-core-inspect { background: none; border: 0; border-bottom: 1px solid #b794b44a; padding: 15px 0; margin-top: 20px; color: #e5bfda; cursor: pointer; }
+.oc-core-inspect > span { font-size: 18px; font-weight: 200; }
+.oc-core-dialog { position: fixed; width: min(560px, calc(100% - 36px)); max-height: 85svh; overflow-y: auto; padding: 65px 40px 40px; border: 1px solid #bc8ebc55; background: #100c16f5; color: #eee3ed; box-shadow: 0 50px 180px #000a; }
+.oc-core-dialog::backdrop { background: #020205b0; backdrop-filter: blur(12px); }
+.oc-core-dialog > svg { width: 58px; color: #dcb7cc; margin-bottom: 30px; }
+.oc-core-dialog h2 { font-size: 28px; }
+.oc-core-dialog > p:not(.oc-eyebrow) { font-size: 13px; line-height: 2.2; color: #c4b4c6; }
+.oc-core-dialog dl { margin: 30px 0; }
+.oc-core-dialog dl > div { display: flex; gap: 25px; padding: 15px 0; border-top: 1px solid #aa7ea526; }
+.oc-core-dialog dt { color: #ecc4df; font-size: 13px; }
+.oc-core-dialog dd { color: #bfaebf; font-size: 12px; margin: 0; }
+.oc-dialog-close { position: absolute; right: 20px; top: 20px; border: none; background: transparent; padding: 10px; font-size: 11px !important; }
+.oc-temple { padding-top: 15svh; padding-bottom: 24svh; }
+.oc-temple-heading { text-align: center; }
+.oc-temple-heading > .oc-eyebrow { justify-content: center; }
+.oc-temple-heading h2 { font-size: clamp(30px, 3vw, 46px); }
+.oc-leader-exhibition { display: grid; grid-template-columns: .7fr 1.3fr .7fr; gap: 3vw; align-items: center; margin-top: 8svh; }
+.oc-leader-exhibition > .oc-exhibition-portrait { grid-column: 2; }
+.oc-leader-exhibition > .oc-exhibition-copy { grid-column: 3; }
+.oc-exhibition-portrait { position: relative; height: clamp(360px, 52vw, 620px); }
+.oc-exhibition-portrait::before { content: ""; position: absolute; inset: -8% -12%; border: 1px solid #d2a3c419; border-radius: 50%; pointer-events: none; }
+.oc-exhibition-portrait img { height: 100%; width: 100%; object-fit: contain; object-position: center; filter: saturate(.6); mask-image: linear-gradient(transparent, #000 12%, #000 78%, transparent); -webkit-mask-image: linear-gradient(transparent, #000 12%, #000 78%, transparent); }
+.oc-vacant-portrait { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(ellipse, #c4a1b909, transparent 67%); gap: 40px; }
+.oc-vacant-portrait svg { width: 40%; height: auto; color: #d6adc933; }
+.oc-vacant-portrait span, .oc-exhibition-coordinate { color: #a789a4; font-size: 8px; letter-spacing: .18em; }
+.oc-exhibition-coordinate { position: absolute; bottom: 0; left: 0; }
+.oc-exhibition-copy { position: relative; }
+.oc-exhibition-copy::before { content: ""; position: absolute; inset: -60px; z-index: -1; background: radial-gradient(ellipse, #060409bd, transparent 70%); pointer-events: none; }
+.oc-exhibition-copy h3 { font-size: clamp(23px, 2.1vw, 32px); margin: 25px 0; line-height: 1.6; overflow-wrap: anywhere; }
+.oc-exhibition-copy .oc-leader-bio { font-size: 13px; color: #c0b1c3; line-height: 2.4; }
+.oc-leader-register { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 55px; margin-top: 65px; }
+.oc-leader-register span { font-size: 9px; color: #be9cb7; }
+.oc-leader-register h3 { font-size: 17px; margin-top: 12px; }
+.oc-digital-archive { display: grid; grid-template-columns: .8fr 1.2fr; gap: 7vw; min-height: 150svh; align-items: start; padding-top: 20svh; }
+.oc-archive-heading { position: sticky; top: 22svh; padding-bottom: 60px; }
+.oc-archive-heading h2 { font-size: clamp(30px, 3.15vw, 46px); }
+.oc-document-corridor { display: flex; flex-direction: column; align-items: flex-end; gap: 17svh; padding: 15svh 0 5svh; min-width: 0; }
+.oc-archive-panel { position: relative; width: 100%; padding: 38px; background: linear-gradient(135deg, #a494c612, #100c15c9 50%, #150c1bc9); border: 1px solid #d7b9e027; border-left-color: #e0c2e35e; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: -28px 25px 90px #0005, inset 0 1px 0 #fff1; }
+.oc-archive-panel:nth-child(2) { margin-right: 4vw; }
+.oc-archive-panel:nth-child(3) { margin-right: 1vw; }
+.oc-document-index { display: flex; align-items: center; justify-content: space-between; color: #c6aacb; padding-bottom: 38px; font-size: 10px; letter-spacing: .16em; }
+.oc-document-index > svg { width: 27px; height: 27px; color: #a88fab; }
+.oc-archive-panel h3 { font-size: 24px; line-height: 1.65; margin: 18px 0 22px; overflow-wrap: anywhere; }
+.oc-archive-panel .prose { font-size: 13px; line-height: 2.5; color: #c3b9cd; white-space: pre-wrap; }
+.oc-document-bottom { display: block; margin-top: 50px; font-size: 7px; letter-spacing: .2em; color: #967c99; }
+.oc-archive-awaiting > p { font-size: 12px; color: #b7a6bd; }
+.oc-network { min-height: 140svh; padding-top: 15svh; }
+.oc-network-heading { max-width: 630px; }
+.oc-real-stats { max-width: 760px; margin: 13svh 0 0 auto; }
+.oc-real-stats dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin: 35px 0; }
+.oc-real-stats dl > div { display: flex; flex-direction: column-reverse; }
+.oc-real-stats dd { font-size: clamp(58px, 7vw, 100px); font-weight: 200; margin: 0; letter-spacing: -.06em; line-height: 1.1; color: #e7ccdf; }
+.oc-real-stats dt { font-size: 11px; color: #c0b0c6; margin-top: 18px; }
+.oc-real-stats dt > span { display: block; font-size: 7px; margin-top: 7px; letter-spacing: .2em; }
+.oc-real-stats > small { font-size: 9px; color: #958b9e; line-height: 2; display: block; }
+.oc-network-dispatches { margin-top: 13svh; padding: 35px 0; background: linear-gradient(90deg, #07050bd9, #07050b9c, transparent); }
+.oc-dispatch-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 20px; }
+.oc-dispatch-heading h3 { font-size: 19px; letter-spacing: .03em; margin: 0; }
+.oc-network .oc-empty { border-color: #ba90ad24; background: transparent; text-align: left; padding-left: 0; }
+.oc-assembly { padding-top: 18svh; padding-bottom: 26svh; text-align: center; }
+.oc-assembly-heading > .oc-eyebrow { justify-content: center; }
+.oc-assembly-exhibit { position: relative; margin: 10svh auto 0; padding: 8svh 0 2svh; max-width: 850px; }
+.oc-assembly-axis { position: absolute; inset: 0 -5%; pointer-events: none; }
+.oc-assembly-axis > span { position: absolute; inset: 5% 0; border: 1px solid #d7a1c91c; border-radius: 50%; transform: rotateX(64deg); }
+.oc-assembly-axis > span:nth-child(2) { inset: -6% -10%; border-color: #d7a1c910; }
+.oc-assembly-axis > span:nth-child(3) { inset: -18% -20%; border-color: #d7a1c909; }
+.oc-assembly-agenda { position: relative; width: min(100%, 560px); margin: 0 auto; padding: 30px; background: radial-gradient(ellipse, #08060fce, #08060f12 75%); }
+.oc-assembly-agenda > .oc-eyebrow { justify-content: center; }
+.oc-assembly-agenda h3 { font-size: clamp(24px, 3vw, 38px); font-weight: 400; line-height: 1.8; margin: 28px 0 15px; }
+.oc-assembly-agenda > p:not(.oc-eyebrow) { font-size: 12px; color: #c3b0c4; line-height: 2; }
+.oc-assembly-agenda > small { display: block; margin-top: 28px; font-size: 10px; color: #aa9caf; line-height: 2; }
+.oc-vote-display { display: flex; justify-content: space-between; gap: 60px; padding: 0 8%; margin: 30px 0 0; text-align: center; }
+.oc-vote-display dt { font-size: 15px; letter-spacing: .2em; }
+.oc-vote-display dt span { display: block; font-size: 7px; color: #b49bb4; margin-top: 8px; }
+.oc-vote-display dd { margin: 18px 0 0; font-size: 32px; color: #cbaac3; }
+.oc-vote-display dd small { display: block; font-size: 9px; margin-top: 5px; color: #95869d; }
+.oc-vote-display meter { display: block; width: 110px; height: 4px; margin-top: 15px; accent-color: #d398bc; }
+.oc-assembly-invitation { margin-top: 13svh; scroll-margin-top: 130px; }
+.oc-assembly-invitation p { font-size: 13px; color: #b69eb6; margin-bottom: 25px; }
+.oc-final-mark { display: none; }
+.public-site:has(.oc-journey) .oc-footer { display: flex; flex-direction: column; justify-content: center; min-height: 100svh; border-top: 0; padding: 18svh 10vw 65px; background: transparent; }
+.public-site:has(.oc-journey) .oc-footer-horizon { display: none; }
+.public-site:has(.oc-journey) .oc-final-mark { display: flex; flex-direction: column; gap: 25px; align-items: center; margin-bottom: 10svh; }
+.oc-final-mark > span { font-size: clamp(90px, 12vw, 170px); font-weight: 200; letter-spacing: .12em; margin-left: .12em; line-height: 1; color: #e5d4df; text-shadow: 0 0 80px #e9c5e014; }
+.oc-final-mark > small { color: #977e99; font-size: 7px; letter-spacing: .25em; }
+.public-site:has(.oc-journey) .oc-footer-top { grid-template-columns: 1fr; text-align: center; gap: 32px; padding-bottom: 60px; }
+.public-site:has(.oc-journey) .oc-footer-top > div > svg { display: none; }
+.public-site:has(.oc-journey) .oc-footer-contact > .oc-eyebrow { display: none; }
+.public-site:has(.oc-journey) .oc-footer-contact > a { width: fit-content; margin-inline: auto; gap: 28px; font-size: 23px; }
+.public-site:has(.oc-journey) .oc-footer-links { display: flex; justify-content: center; padding: 10px 0 0; gap: 28px; }
+.public-site:has(.oc-journey) .oc-footer-bottom { justify-content: center; flex-wrap: wrap; gap: 20px 45px; border-color: #c799bd15; }
+.public-site:has(.oc-journey) .oc-footer-end { display: none; }
+
+/* Keep the fallback responsive to the same journey, without depending on GL. */
+.oc-journey[data-journey-scene="leadership"] .oc-scene-fallback,
+.oc-journey[data-journey-scene="charter"] .oc-scene-fallback { filter: hue-rotate(20deg); opacity: .3; }
+.oc-journey[data-journey-scene="final-void"] .oc-scene-fallback { opacity: 0; }
+.oc-journey .oc-scene[data-renderer="webgl"] .oc-scene-fallback { opacity: 0; }
+
+@media (max-width: 1100px) {
+  .oc-chamber { padding-inline: 8vw; }
+  .oc-journey-map { right: 9px; }
+  .oc-digital-archive { gap: 4vw; }
+  .oc-archive-panel { padding: 28px; }
+}
+@media (max-width: 900px) {
+  .oc-journey .oc-hero { height: 100svh; min-height: 740px; padding: 138px 7vw 0; }
+  .oc-journey .oc-hero-copy { width: 100%; max-width: 660px; }
+  .oc-journey .oc-hero h1 { font-size: clamp(38px, 11.8vw, 78px); line-height: 1.24; letter-spacing: -.055em; }
+  .oc-journey .oc-hero h1 > span { display: inline; }
+  .oc-journey .oc-hero h1::after { display: none; }
+  .oc-journey .oc-hero .oc-eyebrow { font-size: 7px; margin-bottom: 23px; }
+  .oc-journey .oc-hero-description { font-size: 11px; max-width: 300px; }
+  .oc-journey .oc-hero-actions { margin-top: 23px; }
+  .oc-journey .oc-art-caption { right: 10%; bottom: 14%; font-size: 7px; }
+  .oc-journey .oc-art-caption small { font-size: 6px; }
+  .oc-world-word { bottom: 16%; font-size: 26vw; }
+  .oc-journey-map { right: 2px; gap: 0; }
+  .oc-journey-map a { width: 28px; height: 36px; }
+  .oc-journey-map i { width: 2px; height: 2px; }
+  .oc-chamber { padding: 18svh 8vw; min-height: 110svh; }
+  .oc-chamber h2 { font-size: clamp(32px, 7.8vw, 54px); margin: 23px 0; }
+  .oc-chamber .oc-eyebrow { font-size: 8px; }
+  .oc-chamber-description { font-size: 12px; }
+  .oc-core-chamber { min-height: 130svh; }
+  .oc-chamber-heading { width: 100%; margin: 0; }
+  .oc-spatial-principles { margin-top: 22svh; grid-template-columns: 1fr; gap: 42px; }
+  .oc-spatial-principles > div { width: fit-content; }
+  .oc-spatial-principles > div:nth-child(2) { margin: 0 0 0 32%; }
+  .oc-spatial-principles > div:nth-child(3) { margin: 0 0 0 6%; }
+  .oc-spatial-principles h3 { font-size: 45px; margin: 12px 0; }
+  .oc-spatial-principles p { font-size: 11px; }
+  .oc-leader-exhibition { grid-template-columns: 1fr; gap: 55px; margin-top: 7svh; }
+  .oc-leader-exhibition > .oc-exhibition-portrait, .oc-leader-exhibition > .oc-exhibition-copy { grid-column: 1; }
+  .oc-exhibition-portrait { height: 52svh; max-height: 600px; width: 86%; margin: 0 auto; }
+  .oc-exhibition-copy { width: 100%; max-width: 600px; margin: 0 auto; }
+  .oc-exhibition-copy h3 { font-size: 29px; }
+  .oc-exhibition-copy .oc-leader-bio { font-size: 12px; }
+  .oc-leader-register { justify-content: flex-start; gap: 35px; }
+  .oc-digital-archive { display: block; min-height: 135svh; }
+  .oc-archive-heading { position: relative; top: auto; padding-bottom: 0; }
+  .oc-document-corridor { padding-top: 12svh; gap: 13svh; }
+  .oc-archive-panel { width: 94%; padding: 27px; }
+  .oc-archive-panel:nth-child(2) { margin-right: 6%; }
+  .oc-archive-panel:nth-child(3) { margin-right: 0; }
+  .oc-document-index { font-size: 8px; padding-bottom: 30px; }
+  .oc-archive-panel h3 { font-size: 22px; }
+  .oc-archive-panel .prose { font-size: 12px; }
+  .oc-real-stats { margin-top: 16svh; }
+  .oc-real-stats dl { gap: 17px; }
+  .oc-real-stats dd { font-size: clamp(48px, 13vw, 76px); }
+  .oc-real-stats dt { font-size: 9px; letter-spacing: 0; }
+  .oc-real-stats > small { font-size: 8px; }
+  .oc-network-dispatches { margin-top: 10svh; }
+  .oc-dispatch-heading { display: block; }
+  .oc-dispatch-heading h3 { font-size: 17px; margin-bottom: 12px; }
+  .oc-assembly { padding-bottom: 22svh; }
+  .oc-assembly-exhibit { padding-top: 3svh; }
+  .oc-assembly-agenda { padding: 20px 0; }
+  .oc-assembly-agenda h3 { font-size: 25px; }
+  .oc-assembly-agenda > small { font-size: 10px; }
+  .oc-vote-display { padding: 0 5%; }
+  .oc-assembly-invitation { margin-top: 12svh; }
+  .public-site:has(.oc-journey) .oc-footer { min-height: 100svh; padding: 15svh 8vw 80px; }
+  .public-site:has(.oc-journey) .oc-footer-top { gap: 28px; padding-bottom: 40px; }
+  .public-site:has(.oc-journey) .oc-footer-bottom { align-items: center; gap: 15px; }
+  .oc-core-dialog { padding: 60px 25px 30px; }
+}
+@media (hover: none) {
+  .oc-journey-map a:hover:not(:focus-visible) span { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .oc-entry { display: none; }
+  .oc-journey [data-spatial-panel] { transform: none; }
+}
+@media (forced-colors: active) {
+  .oc-scene, .oc-entry { display: none; }
+  .oc-journey [data-spatial-panel] { transform: none; }
+  .oc-archive-panel { border: 1px solid CanvasText; }
+}
