@@ -1,0 +1,16 @@
+# dependencies
+/node_modules
+
+# Next.js
+/.next
+/out
+
+# local environment variables
+.env.local
+.env*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Vercel
+.vercel
