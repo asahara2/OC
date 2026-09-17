@@ -220,11 +220,11 @@ export async function deleteArticle(formData: FormData) {
   });
 }
 
-const settingSchema = z.object({ key: z.enum(["site_name", "site_description", "contact_email"]), value: text(2000) });
+const settingSchema = z.object({ key: z.enum(["site_name", "site_description", "contact_email", "constitution_preamble"]), value: text(8000) });
 
 export async function updateSiteSettings(formData: FormData) {
   await execute(async () => {
-    const settings = ["site_name", "site_description", "contact_email"].map((key) => settingSchema.safeParse({ key, value: formValue(formData, key) }));
+    const settings = ["site_name", "site_description", "contact_email", "constitution_preamble"].map((key) => settingSchema.safeParse({ key, value: formValue(formData, key) }));
     const failed = settings.find((item) => !item.success);
     if (failed && !failed.success) throw validationError(failed.error);
     const rows = settings.map((item) => {

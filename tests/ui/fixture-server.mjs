@@ -33,6 +33,7 @@ createServer(async (request, response) => {
       { key: "site_name", value: scenario === "custom" ? "管理画面で設定した共同体名" : "Organization", is_public: true },
       { key: "site_description", value: scenario === "custom" ? "管理画面で設定したキャッチコピー" : "Official website", is_public: true },
       { key: "contact_email", value: "", is_public: true },
+      { key: "constitution_preamble", value: scenario === "custom" ? "これはUI検証用の憲章前文です。\n自由な探究を尊重します。" : "", is_public: true },
     ];
   } else if (scenario !== "empty") data = database[table] ?? [];
   if (scenario === "journey" && table === "leaders") data = data.map((leader) => ({ ...leader, image_url: "http://127.0.0.1:54329/portrait.svg" }));

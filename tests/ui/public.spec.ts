@@ -81,6 +81,10 @@ test("live settings, content, detail routes and admin isolation", async ({ page,
   await expect(page.locator(".oc-hero-description")).toHaveText("管理画面で設定したキャッチコピー");
   await expect(page.getByRole("heading", { name: "検証用 指導者" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "検証用条文" })).toBeVisible();
+  await page.goto("/constitution");
+  await expect(page.getByRole("heading", { name: "前文", exact: true })).toBeVisible();
+  await expect(page.locator(".oc-constitution-preamble")).toContainText("自由な探究を尊重します。");
+  await page.goto("/");
   await page.getByRole("link", { name: /検証用ニュース/ }).click();
   await expect(page).toHaveURL(/\/news\/ui-verification$/);
   await expect(page.locator(".oc-reading-body")).toContainText("<script>");

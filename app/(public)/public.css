@@ -126,7 +126,7 @@
 .oc-article-number { color: #aa7a99; font-size: 22px; font-weight: 300; min-width: 38px; letter-spacing: -.02em; }
 .oc-article h3 { margin: 5px 0 14px; font-size: 20px; letter-spacing: .035em; }
 .oc-article .oc-eyebrow { font-size: 9px; }
-.oc-article .prose { color: var(--oc-muted); line-height: 2.2; font-size: 13px; margin: 0; }
+.oc-article .prose { color: var(--oc-muted); line-height: 2.2; font-size: 13px; margin: 0; white-space: pre-line; }
 .oc-articles-compact .oc-article { padding: 25px 0; gap: 22px; }
 .oc-articles-compact .oc-article h3 { font-size: 17px; }
 .oc-articles-compact .prose { font-size: 11px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
@@ -184,6 +184,9 @@
 .oc-document .oc-news-item:first-child { border-top: 0; }
 .oc-document .oc-articles { max-width: 940px; margin-inline: auto; }
 .oc-document .oc-article:first-child { border-top: 0; }
+.oc-constitution-preamble { max-width: 940px; margin: 0 auto 54px; padding: 36px 0 43px; border-bottom: 1px solid var(--oc-line); }
+.oc-constitution-preamble h2 { font-size: clamp(26px, 3vw, 38px); margin: 19px 0 23px; letter-spacing: .04em; }
+.oc-constitution-preamble .prose { max-width: 780px; margin: 0; color: #d4cbd7; font-size: 14px; line-height: 2.45; white-space: pre-line; }
 .oc-reading { max-width: 800px; margin-inline: auto; }
 .oc-reading h1 { font-size: clamp(30px, 4vw, 54px); letter-spacing: -.025em; }
 .oc-reading-body { font-size: 15px; line-height: 2.5; color: #d4cbd7; }
@@ -305,6 +308,8 @@
   .oc-document-heading { padding-bottom: 30px; margin-bottom: 30px; }
   .oc-document-heading h1 { font-size: 42px; }
   .oc-document .oc-news-list { margin-top: -30px; }
+  .oc-constitution-preamble { margin-bottom: 30px; padding: 29px 0 35px; }
+  .oc-constitution-preamble .prose { font-size: 13px; line-height: 2.35; }
   .oc-reading h1 { font-size: 29px; }
   .oc-reading-body { font-size: 13px; line-height: 2.4; }
 }

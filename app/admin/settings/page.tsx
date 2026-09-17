@@ -22,6 +22,7 @@ export default async function SettingsPage() {
             <label>サイト名<input name="site_name" required maxLength={200} defaultValue={settings.get("site_name")} /></label>
             <label>お問い合わせメール<input name="contact_email" type="email" maxLength={2000} defaultValue={settings.get("contact_email")} /></label>
             <label className="full">サイト説明<textarea name="site_description" maxLength={2000} defaultValue={settings.get("site_description")} /></label>
+            <label className="full">憲章 前文<textarea name="constitution_preamble" maxLength={8000} rows={10} defaultValue={settings.get("constitution_preamble")} /></label>
           </div>
           <div className="form-actions"><button type="submit">保存</button></div>
         </form>

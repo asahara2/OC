@@ -5,12 +5,14 @@ export type PublicSettings = {
   siteName: string;
   siteDescription: string;
   contactEmail: string;
+  constitutionPreamble: string;
 };
 
 const defaults: PublicSettings = {
   siteName: "Organization",
   siteDescription: "Official website",
   contactEmail: "",
+  constitutionPreamble: "",
 };
 
 function settingString(value: unknown, fallback: string) {
@@ -27,6 +29,7 @@ export async function getPublicSettings(): Promise<PublicSettings> {
     siteName: settingString(values.get("site_name"), defaults.siteName),
     siteDescription: settingString(values.get("site_description"), defaults.siteDescription),
     contactEmail: settingString(values.get("contact_email"), defaults.contactEmail),
+    constitutionPreamble: settingString(values.get("constitution_preamble"), defaults.constitutionPreamble),
   };
 }
 
