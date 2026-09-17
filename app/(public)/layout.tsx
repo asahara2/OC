@@ -13,9 +13,9 @@ export default async function PublicLayout({ children }: Readonly<{ children: Re
   return (
     <div className="public-site" id="top">
       <a className="oc-skip" href="#main-content">本文へスキップ</a>
-      <SiteHeader siteName={identity.name} />
+      <SiteHeader siteName={identity.displayName} />
       <main className="oc-main" id="main-content">{children}</main>
-      <SiteFooter siteName={identity.name} contactEmail={settings.contactEmail} />
+      <SiteFooter siteName={identity.displayName} contactEmail={settings.contactEmail} />
     </div>
   );
 }
