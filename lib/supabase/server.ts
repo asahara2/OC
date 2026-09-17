@@ -2,9 +2,21 @@ import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/lib/supabase/types";
 
+/**
+ * This module runs only on the server. A dynamic lookup deliberately prevents
+ * Next from replacing a public variable with `undefined` during a build that
+ * was started before Vercel had applied its environment-variable update.
+ * Vercel Functions then read the deployment's runtime environment instead.
+ */
+function runtimeEnv(name: string) {
+  return process.env[name];
+}
+
 function publicConfig() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = runtimeEnv("NEXT_PUBLIC_SUPABASE_URL") ?? runtimeEnv("SUPABASE_URL");
+  const anonKey = runtimeEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
+    ?? runtimeEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY")
+    ?? runtimeEnv("SUPABASE_PUBLISHABLE_KEY");
 
   if (!url || !anonKey) {
     throw new Error("Supabase public environment variables are not configured.");
@@ -27,7 +39,7 @@ export function createPublicClient() {
  */
 export function createAdminClient() {
   const { url } = publicConfig();
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const serviceRoleKey = runtimeEnv("SUPABASE_SERVICE_ROLE_KEY");
 
   if (!serviceRoleKey) {
     throw new Error("SUPABASE_SERVICE_ROLE_KEY is not configured.");
