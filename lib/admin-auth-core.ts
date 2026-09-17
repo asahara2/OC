@@ -1,8 +1,8 @@
 function configuredCredentials() {
-  // Bracket access intentionally keeps this runtime-configurable on Vercel.
-  // Direct process.env.NAME access may otherwise be replaced during the build.
-  const username = process.env["ADMIN_USERNAME"];
-  const password = process.env["ADMIN_PASSWORD"];
+  // Middleware runs in Vercel's Edge runtime. Direct references let Vercel
+  // inject these server-side secrets into the deployed middleware bundle.
+  const username = process.env.ADMIN_USERNAME;
+  const password = process.env.ADMIN_PASSWORD;
   return username && password ? `${username}:${password}` : null;
 }
 
