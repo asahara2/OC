@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { listPublishedConstitution } from "@/lib/content";
+import { ArticleList } from "@/components/public/article-list";
 
 export const metadata: Metadata = { title: "憲章" };
 export const dynamic = "force-dynamic";
@@ -8,16 +9,6 @@ export const dynamic = "force-dynamic";
 export default async function ConstitutionPage() {
   const articles = await listPublishedConstitution();
   return (
-    <><h1>憲章</h1>
-      {articles.length === 0 ? <p className="muted">公開中の条文はありません。</p> : (
-        <div className="stack">
-          {articles.map((article) => <article className="card" key={article.id}>
-            <p className="eyebrow">第 {article.article_number} 条</p>
-            <h2>{article.title}</h2>
-            <div className="prose">{article.content}</div>
-          </article>)}
-        </div>
-      )}
-    </>
+    <div className="oc-document"><header className="oc-document-heading"><p className="oc-eyebrow">03 / OUR CONSTITUTION</p><h1>共同体憲章</h1><p>共に歩むための意思と、自由のよりどころ。</p></header><ArticleList articles={articles} /></div>
   );
 }

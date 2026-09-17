@@ -1,5 +1,7 @@
 # Organization site foundation
 
+公開UIの構成、3D品質調整、表示部品と既存データ層の境界、ブラウザ検証方法は [docs/UI.md](docs/UI.md) を参照してください。
+
 Next.js App Router と Supabase を使う、公開サイトと最小限の管理画面です。ニュース、憲章、指導者、役職、サイト設定を管理できます。`/admin` はHTTP Basic Authenticationで保護され、更新処理はServer Actionsからのみ実行されます。
 
 ## 必要環境

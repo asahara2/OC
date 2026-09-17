@@ -14,3 +14,7 @@
 
 # Vercel
 .vercel
+
+# Browser verification artifacts (test fixtures never ship in the app)
+/test-results/
+/playwright-report/
