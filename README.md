@@ -32,6 +32,8 @@ Next.js App Router と Supabase を使う、公開サイトと最小限の管理
 
    CLIを使わない場合は、[supabase/migrations/20260917000000_initial_schema.sql](supabase/migrations/20260917000000_initial_schema.sql) を Supabase SQL Editor で実行してください。
 
+   リアルタイム総会投票を使う場合は、続けて [supabase/migrations/20260918030000_add_realtime_polls.sql](supabase/migrations/20260918030000_add_realtime_polls.sql) を実行してください。ログイン不要で、ブラウザごとに保存する匿名トークンによって重複投票を抑止します（強い本人確認ではありません）。
+
 4. 開発サーバーを起動します。
 
    ```bash
