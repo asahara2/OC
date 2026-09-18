@@ -1,8 +1,7 @@
-import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "crypto";
+import { createHmac, timingSafeEqual } from "crypto";
 import { cookies, headers } from "next/headers";
 
 import { hasValidAdminAuthorization } from "@/lib/admin-auth-core";
-import { createAdminClient } from "@/lib/supabase/server";
 
 export const staffCookieName = "oc_staff_session";
 export const staffPermissions = ["news_write", "constitution_write", "poll_manage", "message_publish", "troll_publish", "leader_manage", "media_manage"] as const;
@@ -16,16 +15,23 @@ function sessionSecret() {
 }
 function signature(value: string) { return createHmac("sha256", sessionSecret()).update(value).digest("base64url"); }
 
-export function hashStaffPassword(password: string) {
-  const salt = randomBytes(16).toString("base64url");
-  const digest = scryptSync(password, salt, 64).toString("base64url");
-  return `scrypt$${salt}$${digest}`;
+type EnvStaffAccount = { id: string; role: "kyoso" | "mod"; password: string; permissions: StaffPermission[] };
+export function environmentStaffAccounts(): EnvStaffAccount[] {
+  const specs = [
+    ["KYOSO", "kyoso", staffPermissions], ["MOD_01", "mod", ["news_write", "constitution_write", "poll_manage"]],
+    ["MOD_02", "mod", ["news_write", "constitution_write", "poll_manage"]], ["MOD_03", "mod", ["news_write", "constitution_write", "poll_manage"]],
+  ] as const;
+  return specs.flatMap(([prefix, role, basePermissions]) => {
+    const id = process.env[`${prefix}_USERNAME`]; const password = process.env[`${prefix}_PASSWORD`];
+    if (!id || !password) return [];
+    const extra = (process.env[`${prefix}_PERMISSIONS`] ?? "").split(",").map((item) => item.trim()).filter((item): item is StaffPermission => staffPermissions.includes(item as StaffPermission));
+    return [{ id, role, password, permissions: [...new Set([...basePermissions, ...extra])] }];
+  });
 }
-export function verifyStaffPassword(password: string, encoded: string) {
-  const [algorithm, salt, expected] = encoded.split("$");
-  if (algorithm !== "scrypt" || !salt || !expected) return false;
-  const actual = scryptSync(password, salt, 64).toString("base64url");
-  return actual.length === expected.length && timingSafeEqual(Buffer.from(actual), Buffer.from(expected));
+export function verifyEnvironmentStaffPassword(username: string, password: string) {
+  const account = environmentStaffAccounts().find((item) => item.id === username);
+  if (!account || account.password.length !== password.length || !timingSafeEqual(Buffer.from(account.password), Buffer.from(password))) return null;
+  return account;
 }
 export function createStaffSession(id: string, role: string) {
   const payload = Buffer.from(JSON.stringify({ id, role, expiresAt: Date.now() + 1000 * 60 * 60 * 12 })).toString("base64url");
@@ -49,7 +55,7 @@ export async function requireStaffPermission(permission: StaffPermission) {
   const session = await getStaffSession();
   if (!session) throw new Error("スタッフとしてログインしてください。");
   if (session.role === "admin" || session.role === "kyoso") return session;
-  const { data, error } = await createAdminClient().from("staff_permissions").select("granted").eq("staff_id", session.id).eq("permission", permission).maybeSingle();
-  if (error || !data?.granted) throw new Error("この操作を行う権限がありません。");
+  const account = environmentStaffAccounts().find((item) => item.id === session.id && item.role === session.role);
+  if (!account?.permissions.includes(permission)) throw new Error("この操作を行う権限がありません。");
   return session;
 }

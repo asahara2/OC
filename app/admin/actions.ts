@@ -5,7 +5,7 @@ import { randomUUID } from "crypto";
 import { z } from "zod";
 
 import { requireAdmin } from "@/lib/admin-auth";
-import { hashStaffPassword, requireStaffPermission, staffPermissions, type StaffPermission } from "@/lib/staff-auth";
+import { requireStaffPermission, type StaffPermission } from "@/lib/staff-auth";
 import { createAdminClient } from "@/lib/supabase/server";
 
 const slug = z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug は半角英小文字・数字・ハイフンで入力してください。");
@@ -272,35 +272,6 @@ export async function deleteCommunityMessage(formData: FormData) {
   }, "message_publish");
 }
 
-const staffSchema = z.object({ username: z.string().trim().regex(/^[a-z0-9][a-z0-9_-]{2,63}$/, "IDは半角英小文字・数字・_・-で3〜64文字にしてください。"), password: z.string().min(12, "パスワードは12文字以上にしてください。").max(256), role: z.enum(["kyoso", "mod", "admin", "taisho", "daihyo"]) });
-const defaultPermissions: Record<string, StaffPermission[]> = { kyoso: [...staffPermissions], mod: ["news_write", "constitution_write", "poll_manage"], admin: [...staffPermissions], taisho: [], daihyo: [] };
-
-export async function createStaffAccount(formData: FormData) {
-  await execute(async () => {
-    const parsed = staffSchema.safeParse({ username: formValue(formData, "username"), password: formValue(formData, "password"), role: formValue(formData, "role_slug") });
-    if (!parsed.success) throw validationError(parsed.error);
-    const client = createAdminClient();
-    const { data: account, error } = await client.from("staff_accounts").insert({ username: parsed.data.username, password_hash: hashStaffPassword(parsed.data.password), role_slug: parsed.data.role, is_active: checked(formData, "is_active") }).select("id").single();
-    if (error || !account) throw new Error(`スタッフIDを発行できませんでした: ${error?.message ?? "結果がありません。"}`);
-    const permissions = defaultPermissions[parsed.data.role];
-    if (permissions.length) {
-      const result = await client.from("staff_permissions").insert(permissions.map((permission) => ({ staff_id: account.id, permission, granted: true })));
-      if (result.error) throw new Error(`初期権限を保存できませんでした: ${result.error.message}`);
-    }
-    revalidatePath("/admin/staff");
-  });
-}
-
-export async function updateStaffPermissions(formData: FormData) {
-  await execute(async () => {
-    const parsed = id.safeParse(formValue(formData, "staff_id"));
-    if (!parsed.success) throw validationError(parsed.error);
-    const rows = staffPermissions.map((permission) => ({ staff_id: parsed.data, permission, granted: checked(formData, permission) }));
-    const { error } = await createAdminClient().from("staff_permissions").upsert(rows);
-    if (error) throw new Error(`権限を更新できませんでした: ${error.message}`);
-    revalidatePath("/admin/staff");
-  });
-}
 
 const articleSchema = z.object({ articleNumber: z.coerce.number().int().positive(), title: text(200).min(1), content: text(50000).min(1), displayOrder: order });
 

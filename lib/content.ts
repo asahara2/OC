@@ -90,11 +90,13 @@ export async function listPublicPolls(): Promise<PublicPoll[]> {
     .select("*")
     .eq("is_published", true)
     .order("created_at", { ascending: false });
-  if (error) throw new Error(`Unable to load polls: ${error.message}`);
+  // Optional feature: a site can deploy before the poll migration is applied.
+  // Keep the public homepage available and show the waiting state in that case.
+  if (error) return [];
   const pollIds = (polls ?? []).map((poll) => poll.id);
   if (pollIds.length === 0) return [];
   const { data: options, error: optionError } = await supabase.from("poll_options").select("*").in("poll_id", pollIds).order("display_order");
-  if (optionError) throw new Error(`Unable to load poll options: ${optionError.message}`);
+  if (optionError) return [];
   return (polls ?? []).map((poll) => ({
     ...poll,
     options: (options ?? []).filter((option) => option.poll_id === poll.id),
@@ -103,7 +105,9 @@ export async function listPublicPolls(): Promise<PublicPoll[]> {
 
 export async function listPublicMessages(): Promise<CommunityMessage[]> {
   const { data, error } = await createPublicClient().from("community_messages").select("*").eq("is_published", true).order("created_at", { ascending: false }).limit(50);
-  if (error) throw new Error(`Unable to load community messages: ${error.message}`);
+  // This is a progressive enhancement; do not take the entire public site down
+  // while a database migration is still being applied.
+  if (error) return [];
   return data ?? [];
 }
 

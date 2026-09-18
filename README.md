@@ -54,11 +54,15 @@ Next.js App Router と Supabase を使う、公開サイトと最小限の管理
 | `ADMIN_USERNAME` | `/admin` のBasic Authユーザー名 |
 | `ADMIN_PASSWORD` | `/admin` のBasic Authパスワード |
 | `STAFF_SESSION_SECRET` | 教祖・MOD用の独自ログインセッションを署名する24文字以上のランダムな秘密文字列 |
+| `KYOSO_USERNAME` / `KYOSO_PASSWORD` | 教祖アカウントのID・個別パスワード |
+| `MOD_01_USERNAME` / `MOD_01_PASSWORD` | MOD 1のID・個別パスワード |
+| `MOD_02_USERNAME` / `MOD_02_PASSWORD` | MOD 2のID・個別パスワード |
+| `MOD_03_USERNAME` / `MOD_03_PASSWORD` | MOD 3のID・個別パスワード |
 
 ## セキュリティ設計
 
 - DBはRLSを有効化し、匿名利用者には公開済みコンテンツの `SELECT` だけを許可します。
-- DBの書込みポリシーは作成していません。管理操作はBasic Authを通過したサーバー側のservice role clientだけが実行します。
+- スタッフのIDとパスワードはDBには保存せず、デプロイ先の環境変数で照合します。管理操作はサーバー側で権限を判定します。
 - Server Actionsでも認証ヘッダーを再検証するため、`/admin` ミドルウェアを迂回したリクエストを拒否します。
 - Basic Authの資格情報は平文比較せず、固定長のSHA-256ダイジェストを比較します。必ずHTTPSが提供されるVercel等で運用してください。
 - 入力値はServer ActionごとにZodで検証し、公開本文はHTMLとして解釈せずテキストとして表示します。
