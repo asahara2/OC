@@ -24,7 +24,10 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     <div className="oc-document"><article className="oc-reading">
       <header className="oc-document-heading"><p className="oc-eyebrow">NEWS / <time dateTime={item.published_at ?? undefined}>{formatDate(item.published_at)}</time></p>
         <h1>{item.title}</h1>{item.excerpt ? <p>{item.excerpt}</p> : null}</header>
+      {/* eslint-disable-next-line @next/next/no-img-element -- editor-controlled remote image URL */}
+      {item.image_url ? <img className="oc-news-media" src={item.image_url} alt="" /> : null}
       <div className="oc-reading-body prose">{item.content}</div>
+      {item.video_url ? <p><a className="oc-text-link" href={item.video_url} target="_blank" rel="noreferrer">動画を開く<ArrowIcon /></a></p> : null}
       <Link href="/news" className="oc-text-link">すべてのニュース<ArrowIcon /></Link>
     </article></div>
   );

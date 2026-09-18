@@ -1,5 +1,5 @@
 import { createPublicClient } from "@/lib/supabase/server";
-import type { ConstitutionArticle, Leader, NewsItem, Role } from "@/lib/supabase/types";
+import type { CommunityMessage, ConstitutionArticle, Leader, NewsItem, Poll, PollOption, Role } from "@/lib/supabase/types";
 
 export type PublicSettings = {
   siteName: string;
@@ -65,7 +65,7 @@ export async function listPublicLeaders(): Promise<PublicLeader[]> {
     .order("display_order", { ascending: true })
     .order("name", { ascending: true });
   if (error) throw new Error(`Unable to load leaders: ${error.message}`);
-  return (data ?? []) as PublicLeader[];
+  return (data ?? []).filter((leader) => leader.role?.slug !== "mod" || leader.mod_leader_approved) as PublicLeader[];
 }
 
 export async function listPublishedConstitution(): Promise<ConstitutionArticle[]> {
@@ -77,6 +77,33 @@ export async function listPublishedConstitution(): Promise<ConstitutionArticle[]
     .order("display_order", { ascending: true })
     .order("article_number", { ascending: true });
   if (error) throw new Error(`Unable to load constitution: ${error.message}`);
+  return data ?? [];
+}
+
+export type PublicPoll = Poll & { options: PollOption[] };
+
+/** Public polls never require Supabase Auth. A browser cookie is used only to prevent repeat votes. */
+export async function listPublicPolls(): Promise<PublicPoll[]> {
+  const supabase = createPublicClient();
+  const { data: polls, error } = await supabase
+    .from("polls")
+    .select("*")
+    .eq("is_published", true)
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(`Unable to load polls: ${error.message}`);
+  const pollIds = (polls ?? []).map((poll) => poll.id);
+  if (pollIds.length === 0) return [];
+  const { data: options, error: optionError } = await supabase.from("poll_options").select("*").in("poll_id", pollIds).order("display_order");
+  if (optionError) throw new Error(`Unable to load poll options: ${optionError.message}`);
+  return (polls ?? []).map((poll) => ({
+    ...poll,
+    options: (options ?? []).filter((option) => option.poll_id === poll.id),
+  }));
+}
+
+export async function listPublicMessages(): Promise<CommunityMessage[]> {
+  const { data, error } = await createPublicClient().from("community_messages").select("*").eq("is_published", true).order("created_at", { ascending: false }).limit(50);
+  if (error) throw new Error(`Unable to load community messages: ${error.message}`);
   return data ?? [];
 }
 

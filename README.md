@@ -34,6 +34,8 @@ Next.js App Router と Supabase を使う、公開サイトと最小限の管理
 
    リアルタイム総会投票を使う場合は、続けて [supabase/migrations/20260918030000_add_realtime_polls.sql](supabase/migrations/20260918030000_add_realtime_polls.sql) を実行してください。ログイン不要で、ブラウザごとに保存する匿名トークンによって重複投票を抑止します（強い本人確認ではありません）。
 
+   その後、役職アカウント・メッセージ・ニュースのメディア・指導者画像を使う場合は `20260919000000` 以降の migration を番号順に実行してください。以前の投票SQLが途中でエラーになった場合は、最後に [20260919004000_repair_poll_policies.sql](supabase/migrations/20260919004000_repair_poll_policies.sql) を実行すると投票ポリシーを復旧できます。
+
 4. 開発サーバーを起動します。
 
    ```bash
@@ -51,6 +53,7 @@ Next.js App Router と Supabase を使う、公開サイトと最小限の管理
 | `SUPABASE_SERVICE_ROLE_KEY` | 管理Server Actions専用キー |
 | `ADMIN_USERNAME` | `/admin` のBasic Authユーザー名 |
 | `ADMIN_PASSWORD` | `/admin` のBasic Authパスワード |
+| `STAFF_SESSION_SECRET` | 教祖・MOD用の独自ログインセッションを署名する24文字以上のランダムな秘密文字列 |
 
 ## セキュリティ設計
 
@@ -71,7 +74,7 @@ npm run build
 ## Vercelへのデプロイ
 
 1. リポジトリをVercelにimportします。フレームワーク設定はNext.jsのままで構いません。
-2. 上記5個の環境変数を Vercel Project Settings の Preview と Production に登録します。
+2. 上記6個の環境変数を Vercel Project Settings の Preview と Production に登録します。
 3. Supabase migration を適用済みであることを確認してデプロイします。
 
 `vercel.json` にランタイム依存の設定は置かず、Vercelの標準Next.jsビルドを利用します。セキュリティヘッダーは [next.config.ts](next.config.ts) に定義しています。

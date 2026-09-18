@@ -204,6 +204,16 @@
 .oc-constitution-preamble .prose { max-width: 780px; margin: 0; color: #d4cbd7; font-size: 14px; line-height: 2.45; white-space: pre-line; }
 .oc-reading { max-width: 800px; margin-inline: auto; }
 .oc-reading h1 { font-size: clamp(30px, 4vw, 54px); letter-spacing: -.025em; }
+.oc-news-media { display: block; width: 100%; max-height: 560px; margin: 0 0 42px; object-fit: cover; border: 1px solid rgba(241, 220, 238, .18); }
+.oc-poll-list { display: grid; gap: 28px; }
+.oc-poll { padding: 30px; border: 1px solid rgba(241, 220, 238, .16); background: rgba(255, 255, 255, .02); }
+.oc-poll h2 { margin: 0 0 10px; font-size: clamp(24px, 3vw, 34px); }
+.oc-poll-options { display: grid; gap: 10px; margin-top: 24px; }
+.oc-poll-options button { display: flex; justify-content: space-between; gap: 20px; width: 100%; padding: 16px 18px; color: #f4edf5; background: transparent; border: 1px solid rgba(241, 220, 238, .24); text-align: left; }
+.oc-poll-options button:hover:not(:disabled) { background: rgba(242, 185, 216, .12); border-color: #eab8d1; }
+.oc-poll-options button:disabled { cursor: default; opacity: .72; }
+.oc-poll-options small { color: #d8aac4; white-space: nowrap; }
+.oc-poll-status { color: #ddaec8; margin: 18px 0 0; }.oc-poll-error { color: #ff9da8; margin: 18px 0 0; }
 .oc-reading-body { font-size: 15px; line-height: 2.5; color: #d4cbd7; }
 .oc-reading .oc-text-link { margin-top: 65px; }
 

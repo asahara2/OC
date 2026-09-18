@@ -5,8 +5,11 @@ const links = [
   ["サイト設定", "/admin/settings"],
   ["ニュース", "/admin/news"],
   ["憲章", "/admin/constitution"],
+  ["リアルタイム投票", "/admin/polls"],
+  ["メッセージ", "/admin/messages"],
   ["指導者", "/admin/leaders"],
   ["役職", "/admin/roles"],
+  ["役職アカウント", "/admin/staff"],
 ] as const;
 
 export function AdminNav() {

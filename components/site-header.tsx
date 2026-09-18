@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowIcon, Emblem } from "@/components/public/icons";
 import { ShareSiteButton } from "@/components/public/share-site-button";
 
-const links = [["理念", "/#philosophy"], ["指導者", "/leaders"], ["共同体憲章", "/constitution"], ["ニュース", "/news"]] as const;
+const links = [["理念", "/#philosophy"], ["指導者", "/leaders"], ["共同体憲章", "/constitution"], ["ニュース", "/news"], ["投票", "/polls"], ["発信", "/messages"]] as const;
 
 export function SiteHeader({ siteName }: { siteName: string }) {
   const pathname = usePathname();

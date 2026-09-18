@@ -61,8 +61,8 @@ create policy "public can read options for visible polls" on public.poll_options
   for select to anon, authenticated using (exists (select 1 from public.polls p where p.id = poll_id and p.is_published and (p.results_public or p.is_open)));
 create policy "visitors can cast one open poll vote per browser token" on public.poll_votes
   for insert to anon, authenticated with check (
-    and exists (select 1 from public.polls p where p.id = poll_id and p.is_published and p.is_open and (p.opens_at is null or p.opens_at <= now()) and (p.closes_at is null or p.closes_at > now()))
-    and exists (select 1 from public.poll_options o where o.id = option_id and o.poll_id = poll_id)
+    exists (select 1 from public.polls p where p.id = public.poll_votes.poll_id and p.is_published and p.is_open and (p.opens_at is null or p.opens_at <= now()) and (p.closes_at is null or p.closes_at > now()))
+    and exists (select 1 from public.poll_options o where o.id = public.poll_votes.option_id and o.poll_id = public.poll_votes.poll_id)
   );
 
 alter publication supabase_realtime add table public.poll_options;

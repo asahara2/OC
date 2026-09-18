@@ -23,6 +23,8 @@ export default async function NewsAdminPage() {
             <label>Slug<input name="slug" required pattern="[a-z0-9]+(-[a-z0-9]+)*" maxLength={200} /></label>
             <label className="full">概要<textarea name="excerpt" maxLength={1000} /></label>
             <label className="full">本文<textarea name="content" maxLength={50000} /></label>
+            <label className="full">画像 URL（任意）<input name="image_url" type="url" inputMode="url" maxLength={2048} /></label>
+            <label className="full">動画 URL（任意）<input name="video_url" type="url" inputMode="url" maxLength={2048} /></label>
             <label>公開日時（UTC）<input name="published_at" type="datetime-local" /></label>
             <label className="checkbox"><input name="is_published" type="checkbox" />公開する</label>
           </div>
@@ -40,6 +42,8 @@ export default async function NewsAdminPage() {
                 <label>Slug<input name="slug" required pattern="[a-z0-9]+(-[a-z0-9]+)*" maxLength={200} defaultValue={item.slug} /></label>
                 <label className="full">概要<textarea name="excerpt" maxLength={1000} defaultValue={item.excerpt} /></label>
                 <label className="full">本文<textarea name="content" maxLength={50000} defaultValue={item.content} /></label>
+                <label className="full">画像 URL（任意）<input name="image_url" type="url" inputMode="url" maxLength={2048} defaultValue={item.image_url ?? ""} /></label>
+                <label className="full">動画 URL（任意）<input name="video_url" type="url" inputMode="url" maxLength={2048} defaultValue={item.video_url ?? ""} /></label>
                 <label>公開日時（UTC）<input name="published_at" type="datetime-local" defaultValue={localDateTime(item.published_at)} /></label>
                 <label className="checkbox"><input name="is_published" type="checkbox" defaultChecked={item.is_published} />公開する</label>
               </div>
