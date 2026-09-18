@@ -5,7 +5,7 @@ import { NewsList } from "@/components/news-list";
 import { CoreInspection } from "./core-inspection";
 import { AssemblyExhibit } from "./assembly-exhibit";
 import type { ConstitutionArticle, NewsItem } from "@/lib/supabase/types";
-import type { PublicLeader } from "@/lib/content";
+import type { PublicLeader, PublicPoll } from "@/lib/content";
 import { INITIAL_SITE_NAME } from "@/lib/presentation";
 
 type HomeProps = {
@@ -13,9 +13,10 @@ type HomeProps = {
   news: NewsItem[];
   leaders: PublicLeader[];
   articles: ConstitutionArticle[];
+  polls: PublicPoll[];
 };
 
-export function HomeExperience({ identity, news, leaders, articles }: HomeProps) {
+export function HomeExperience({ identity, news, leaders, articles, polls }: HomeProps) {
   // Respect the existing public order; do not invent a new hierarchy or role.
   const leader = leaders[0];
   return <div className="oc-home oc-journey">
@@ -67,7 +68,7 @@ export function HomeExperience({ identity, news, leaders, articles }: HomeProps)
     </section>
     <section className="oc-chamber oc-assembly" id="assembly" aria-labelledby="assembly-title">
       <div className="oc-assembly-heading"><p className="oc-eyebrow"><span>06 /</span> THE ASSEMBLY</p><h2 id="assembly-title">声が集まり、<br /><em>未来をかたどる。</em></h2><p className="oc-chamber-description">共同体総会</p></div>
-      <AssemblyExhibit />
+      <AssemblyExhibit poll={polls[0]} />
       <div className="oc-assembly-invitation" id="join"><p>あなたの問いを、この空間へ。</p><a href={`mailto:${identity.email}`} className="oc-button oc-button-outline">共同体に問い合わせる<ArrowIcon diagonal /></a></div>
     </section>
   </div>;

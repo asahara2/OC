@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getPublicSettings, listPublishedConstitution, listPublishedNews, listPublicLeaders } from "@/lib/content";
+import { getPublicSettings, listPublishedConstitution, listPublishedNews, listPublicLeaders, listPublicPolls } from "@/lib/content";
 import { publicIdentity } from "@/lib/presentation";
 import { HomeExperience } from "@/components/public/home-experience";
 
@@ -11,8 +11,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [settings, news, leaders, articles] = await Promise.all([
-    getPublicSettings(), listPublishedNews(), listPublicLeaders(), listPublishedConstitution(),
+  const [settings, news, leaders, articles, polls] = await Promise.all([
+    getPublicSettings(), listPublishedNews(), listPublicLeaders(), listPublishedConstitution(), listPublicPolls(),
   ]);
-  return <HomeExperience identity={publicIdentity(settings)} news={news} leaders={leaders} articles={articles} />;
+  return <HomeExperience identity={publicIdentity(settings)} news={news} leaders={leaders} articles={articles} polls={polls} />;
 }

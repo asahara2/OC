@@ -109,11 +109,12 @@
 .oc-assembly-agenda h3 { font-size: clamp(24px, 3vw, 38px); font-weight: 400; line-height: 1.8; margin: 28px 0 15px; }
 .oc-assembly-agenda > p:not(.oc-eyebrow) { font-size: 12px; color: #c3b0c4; line-height: 2; }
 .oc-assembly-agenda > small { display: block; margin-top: 28px; font-size: 10px; color: #aa9caf; line-height: 2; }
-.oc-vote-display { display: flex; justify-content: space-between; gap: 60px; padding: 0 8%; margin: 30px 0 0; text-align: center; }
-.oc-vote-display dt { font-size: 15px; letter-spacing: .2em; }
-.oc-vote-display dt span { display: block; font-size: 7px; color: #b49bb4; margin-top: 8px; }
-.oc-vote-display dd { margin: 18px 0 0; font-size: 32px; color: #cbaac3; }
-.oc-vote-display dd small { display: block; font-size: 9px; margin-top: 5px; color: #95869d; }
+.oc-vote-display { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 0 8%; margin: 30px 0 0; text-align: center; }
+.oc-vote-display button, .oc-vote-display > div { min-width: 180px; padding: 17px 22px; color: #f6edf5; background: transparent; border: 1px solid #d7a1c94d; }
+.oc-vote-display button:hover:not(:disabled) { background: #d7a1c917; border-color: #efc1dc; }.oc-vote-display button:disabled { cursor: default; }
+.oc-vote-display span, .oc-vote-display strong { display: block; }.oc-vote-display span { font-size: 15px; letter-spacing: .12em; }.oc-vote-display span small { display: block; font-size: 9px; color: #b49bb4; margin-top: 8px; }
+.oc-vote-display strong { margin-top: 18px; font-size: 30px; font-weight: 400; color: #cbaac3; }.oc-vote-display strong small { display: block; font-size: 9px; margin-top: 5px; color: #95869d; }
+.oc-vote-error { color: #ffacb7 !important; }
 .oc-vote-display meter { display: block; width: 110px; height: 4px; margin-top: 15px; accent-color: #d398bc; }
 .oc-assembly-invitation { margin-top: 13svh; scroll-margin-top: 130px; }
 .oc-assembly-invitation p { font-size: 13px; color: #b69eb6; margin-bottom: 25px; }
