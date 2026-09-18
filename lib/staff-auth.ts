@@ -6,7 +6,7 @@ import { hasValidAdminAuthorization } from "@/lib/admin-auth-core";
 export const staffCookieName = "oc_staff_session";
 export const staffPermissions = ["news_write", "constitution_write", "poll_manage", "message_publish", "troll_publish", "leader_manage", "media_manage"] as const;
 export type StaffPermission = (typeof staffPermissions)[number];
-type StaffSession = { id: string; role: string; expiresAt: number };
+export type StaffSession = { id: string; role: string; expiresAt: number };
 
 function sessionSecret() {
   const secret = process.env.STAFF_SESSION_SECRET;
@@ -49,13 +49,16 @@ export function parseStaffSessionCookie(value?: string): StaffSession | null {
   } catch { return null; }
 }
 export async function getStaffSession() { return parseStaffSessionCookie((await cookies()).get(staffCookieName)?.value); }
+export function permissionsForStaffSession(session: StaffSession | null): StaffPermission[] {
+  if (!session) return [];
+  if (session.role === "admin" || session.role === "kyoso") return [...staffPermissions];
+  return environmentStaffAccounts().find((item) => item.id === session.id && item.role === session.role)?.permissions ?? [];
+}
 export async function requireStaffPermission(permission: StaffPermission) {
   const requestHeaders = await headers();
   if (await hasValidAdminAuthorization(requestHeaders.get("authorization"))) return { id: "admin", role: "admin" };
   const session = await getStaffSession();
   if (!session) throw new Error("スタッフとしてログインしてください。");
-  if (session.role === "admin" || session.role === "kyoso") return session;
-  const account = environmentStaffAccounts().find((item) => item.id === session.id && item.role === session.role);
-  if (!account?.permissions.includes(permission)) throw new Error("この操作を行う権限がありません。");
+  if (!permissionsForStaffSession(session).includes(permission)) throw new Error("この操作を行う権限がありません。");
   return session;
 }
