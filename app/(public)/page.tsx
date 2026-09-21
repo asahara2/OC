@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getPublicSettings, listPublishedConstitution, listPublishedNews, listPublicLeaders, listPublicPolls } from "@/lib/content";
 import { publicIdentity } from "@/lib/presentation";
 import { HomeExperience } from "@/components/public/home-experience";
+import { ClassicHomeExperience } from "@/components/public/classic-home-experience";
 
 export const dynamic = "force-dynamic";
 
@@ -14,5 +15,6 @@ export default async function HomePage() {
   const [settings, news, leaders, articles, polls] = await Promise.all([
     getPublicSettings(), listPublishedNews(), listPublicLeaders(), listPublishedConstitution(), listPublicPolls(),
   ]);
-  return <HomeExperience identity={publicIdentity(settings)} news={news} leaders={leaders} articles={articles} polls={polls} />;
+  const props = { identity: publicIdentity(settings), news, leaders, articles, polls };
+  return settings.siteMode === "classic" ? <ClassicHomeExperience {...props} /> : <HomeExperience {...props} />;
 }

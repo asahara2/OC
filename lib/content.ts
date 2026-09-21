@@ -22,7 +22,7 @@ const defaults: PublicSettings = {
   backgroundExpiresAt: null,
   activeEffect: null,
   effectExpiresAt: null,
-  siteMode: "immersive",
+  siteMode: "classic",
 };
 
 function settingString(value: unknown, fallback: string) {
