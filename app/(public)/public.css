@@ -8,7 +8,9 @@
 }
 .public-site-classic { background: #f8f5f0; color: #2d2926; }
 .public-site-classic .oc-header { position: sticky; background: #fffdf9; border-bottom-color: #ded6cc; color: #302b27; }
+.public-site-classic .oc-header[data-scrolled="true"], .public-site-classic .oc-header[data-open="true"] { background: #fffdf9; border-bottom-color: #ded6cc; color: #302b27; backdrop-filter: none; }
 .public-site-classic .oc-wordmark, .public-site-classic .oc-navigation a { color: #302b27; }
+.public-site-classic .oc-wordmark small { color: #806f62; }.public-site-classic .oc-nav-share { color: #5c493d; }.public-site-classic .oc-nav-join { color: #fff !important; background: #735746; border-color: #735746; }
 .public-site-classic .oc-main { background: #f8f5f0; }
 .public-site-classic .oc-journey { background: #f8f5f0; }
 .public-site-classic .oc-journey .oc-scene, .public-site-classic .oc-scene { display: none; }
@@ -368,4 +370,21 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .public-site *, .public-site *::before, .public-site *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* Contrast and responsive polish for the public presentation modes. */
+.public-site-immersive .oc-wordmark, .public-site-immersive .oc-navigation > a, .public-site-immersive .oc-nav-share { color: #f2e7ef !important; }
+.public-site-immersive .oc-navigation > a:hover, .public-site-immersive .oc-nav-share:hover { color: #f0b5d0 !important; }
+.classic-contact a { color: #fff !important; }
+@media (max-width: 760px) {
+  .classic-hero { padding: 120px 0 75px; }
+  .classic-hero-inner, .classic-columns { display: block; }
+  .classic-seal { width: 120px; height: 120px; margin: 45px auto 0; font-size: 32px; }
+  .classic-card-grid { grid-template-columns: repeat(2, 1fr); }
+  .classic-leader-card { margin-top: 35px; }
+  .classic-poll { display: block; }
+  .classic-poll .classic-outline { display: inline-block; margin-top: 12px; }
+  .classic-alert { grid-template-columns: 1fr 18px; gap: 8px; }
+  .classic-alert time { grid-column: 1 / -1; }
+  .classic-container { width: min(100% - 32px, 1120px); }
 }

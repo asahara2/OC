@@ -26,6 +26,15 @@ function optionalUrl(value: string) {
   return value.trim() || null;
 }
 
+async function ensurePublicBucket(name: string) {
+  const storage = createAdminClient().storage;
+  const listed = await storage.listBuckets();
+  if (!listed.error && listed.data.some((bucket) => bucket.name === name)) return storage.from(name);
+  const created = await storage.createBucket(name, { public: true });
+  if (created.error && !created.error.message.toLowerCase().includes("already exists")) throw new Error(`Storageバケットを作成できませんでした: ${created.error.message}`);
+  return storage.from(name);
+}
+
 async function leaderImageUrl(formData: FormData, url: string) {
   const image = formData.get("image_file");
   if (!(image instanceof File) || image.size === 0) return optionalUrl(url);
@@ -34,7 +43,7 @@ async function leaderImageUrl(formData: FormData, url: string) {
   if (!allowed.has(image.type)) throw new Error("JPEG、PNG、WebP、GIF画像を選択してください。");
   const extension = image.type.split("/")[1] === "jpeg" ? "jpg" : image.type.split("/")[1];
   const path = `${randomUUID()}.${extension}`;
-  const storage = createAdminClient().storage.from("leader-images");
+  const storage = await ensurePublicBucket("leader-images");
   const { error } = await storage.upload(path, image, { contentType: image.type, upsert: false });
   if (error) throw new Error(`画像をアップロードできませんでした: ${error.message}`);
   return storage.getPublicUrl(path).data.publicUrl;
@@ -343,7 +352,7 @@ export async function updateSiteBackground(formData: FormData) {
   const requestedMinutes = Number(formData.get("duration_minutes") ?? 60);
   const maximum = session.role === "kyoso" ? 60 : 360;
   const minutes = Number.isFinite(requestedMinutes) ? Math.min(maximum, Math.max(1, Math.floor(requestedMinutes))) : maximum;
-  const storage = createAdminClient().storage.from("site-backgrounds");
+  const storage = await ensurePublicBucket("site-backgrounds");
   const path = `${crypto.randomUUID()}.${image.type.split("/")[1]}`;
   const uploaded = await storage.upload(path, image, { contentType: image.type, upsert: false });
   if (uploaded.error) throw new Error(`背景をアップロードできませんでした: ${uploaded.error.message}`);
