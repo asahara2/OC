@@ -6,6 +6,10 @@ export type PublicSettings = {
   siteDescription: string;
   contactEmail: string;
   constitutionPreamble: string;
+  backgroundUrl: string;
+  backgroundExpiresAt: string | null;
+  activeEffect: "cracker" | "emoji" | null;
+  effectExpiresAt: string | null;
 };
 
 const defaults: PublicSettings = {
@@ -13,6 +17,10 @@ const defaults: PublicSettings = {
   siteDescription: "Official website",
   contactEmail: "",
   constitutionPreamble: "",
+  backgroundUrl: "",
+  backgroundExpiresAt: null,
+  activeEffect: null,
+  effectExpiresAt: null,
 };
 
 function settingString(value: unknown, fallback: string) {
@@ -25,11 +33,19 @@ export async function getPublicSettings(): Promise<PublicSettings> {
   if (error) throw new Error(`Unable to load site settings: ${error.message}`);
 
   const values = new Map((data ?? []).map((setting) => [setting.key, setting.value]));
+  const backgroundExpiresAt = settingString(values.get("background_expires_at"), "") || null;
+  const effectExpiresAt = settingString(values.get("effect_expires_at"), "") || null;
+  const now = Date.now();
+  const backgroundUrl = backgroundExpiresAt && new Date(backgroundExpiresAt).getTime() > now ? settingString(values.get("background_url"), "") : "";
+  const effect = effectExpiresAt && new Date(effectExpiresAt).getTime() > now ? settingString(values.get("active_effect"), "") : "";
   return {
     siteName: settingString(values.get("site_name"), defaults.siteName),
     siteDescription: settingString(values.get("site_description"), defaults.siteDescription),
     contactEmail: settingString(values.get("contact_email"), defaults.contactEmail),
     constitutionPreamble: settingString(values.get("constitution_preamble"), defaults.constitutionPreamble),
+    backgroundUrl, backgroundExpiresAt: backgroundUrl ? backgroundExpiresAt : null,
+    activeEffect: effect === "cracker" || effect === "emoji" ? effect : null,
+    effectExpiresAt: effect ? effectExpiresAt : null,
   };
 }
 

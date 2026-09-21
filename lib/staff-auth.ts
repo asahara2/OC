@@ -62,3 +62,10 @@ export async function requireStaffPermission(permission: StaffPermission) {
   if (!permissionsForStaffSession(session).includes(permission)) throw new Error("この操作を行う権限がありません。");
   return session;
 }
+export async function requireFounderOrAdmin() {
+  const requestHeaders = await headers();
+  if (await hasValidAdminAuthorization(requestHeaders.get("authorization"))) return { id: "admin", role: "admin" as const };
+  const session = await getStaffSession();
+  if (!session || session.role !== "kyoso") throw new Error("教祖またはADMINのみ実行できます。");
+  return session;
+}

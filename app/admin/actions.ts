@@ -5,7 +5,7 @@ import { randomUUID } from "crypto";
 import { z } from "zod";
 
 import { requireAdmin } from "@/lib/admin-auth";
-import { requireStaffPermission, type StaffPermission } from "@/lib/staff-auth";
+import { requireFounderOrAdmin, requireStaffPermission, type StaffPermission } from "@/lib/staff-auth";
 import { createAdminClient } from "@/lib/supabase/server";
 
 const slug = z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug は半角英小文字・数字・ハイフンで入力してください。");
@@ -45,6 +45,12 @@ function datetimeValue(value: string, published: boolean) {
   if (!value) return new Date().toISOString();
   const parsed = new Date(value);
   if (Number.isNaN(parsed.valueOf())) throw new Error("公開日時の形式が正しくありません。");
+  return parsed.toISOString();
+}
+function optionalDatetime(value: string) {
+  if (!value) return null;
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.valueOf())) throw new Error("投票期間の日時が正しくありません。");
   return parsed.toISOString();
 }
 
@@ -220,6 +226,7 @@ export async function createPoll(formData: FormData) {
     const { data: poll, error } = await createAdminClient().from("polls").insert({
       title: parsed.data.title, description: parsed.data.description,
       is_published: checked(formData, "is_published"), is_open: checked(formData, "is_open"), results_public: checked(formData, "results_public"),
+      opens_at: optionalDatetime(formValue(formData, "opens_at")), closes_at: optionalDatetime(formValue(formData, "closes_at")),
     }).select("id").single();
     if (error || !poll) throw new Error(`投票を作成できませんでした: ${error?.message ?? "結果がありません。"}`);
     const options = parsePollOptions(parsed.data.options);
@@ -235,6 +242,7 @@ export async function updatePollStatus(formData: FormData) {
     if (!parsed.success) throw validationError(parsed.error);
     const { error } = await createAdminClient().from("polls").update({
       is_published: checked(formData, "is_published"), is_open: checked(formData, "is_open"), results_public: checked(formData, "results_public"),
+      opens_at: optionalDatetime(formValue(formData, "opens_at")), closes_at: optionalDatetime(formValue(formData, "closes_at")),
     }).eq("id", parsed.data);
     if (error) throw new Error(`投票状態を更新できませんでした: ${error.message}`);
     revalidatePath("/polls"); revalidatePath("/admin/polls");
@@ -325,4 +333,40 @@ export async function updateSiteSettings(formData: FormData) {
     if (error) throw new Error(`サイト設定を保存できませんでした: ${error.message}`);
     publicContentChanged(); revalidatePath("/admin/settings");
   });
+}
+
+export async function updateSiteBackground(formData: FormData) {
+  const session = await requireFounderOrAdmin();
+  const image = formData.get("background_file");
+  if (!(image instanceof File) || image.size === 0) throw new Error("背景画像を選択してください。");
+  if (image.size > 8 * 1024 * 1024 || !["image/jpeg", "image/png", "image/webp"].includes(image.type)) throw new Error("JPEG、PNG、WebPの8MB以下の画像を選択してください。");
+  const requestedMinutes = Number(formData.get("duration_minutes") ?? 60);
+  const maximum = session.role === "kyoso" ? 60 : 360;
+  const minutes = Number.isFinite(requestedMinutes) ? Math.min(maximum, Math.max(1, Math.floor(requestedMinutes))) : maximum;
+  const storage = createAdminClient().storage.from("site-backgrounds");
+  const path = `${crypto.randomUUID()}.${image.type.split("/")[1]}`;
+  const uploaded = await storage.upload(path, image, { contentType: image.type, upsert: false });
+  if (uploaded.error) throw new Error(`背景をアップロードできませんでした: ${uploaded.error.message}`);
+  const expiresAt = new Date(Date.now() + minutes * 60_000).toISOString();
+  const { error } = await createAdminClient().from("site_settings").upsert([
+    { key: "background_url", value: storage.getPublicUrl(path).data.publicUrl, is_public: true },
+    { key: "background_expires_at", value: expiresAt, is_public: true },
+  ]);
+  if (error) throw new Error(`背景設定を保存できませんでした: ${error.message}`);
+  publicContentChanged(); revalidatePath("/admin/settings");
+}
+
+export async function triggerSiteEffect(formData: FormData) {
+  const session = await requireFounderOrAdmin();
+  const effect = formValue(formData, "effect");
+  if (effect !== "cracker" && effect !== "emoji") throw new Error("演出の種類が正しくありません。");
+  const requestedSeconds = Number(formData.get("duration_seconds") ?? 10);
+  const maximum = session.role === "kyoso" ? 60 : 360;
+  const seconds = Number.isFinite(requestedSeconds) ? Math.min(maximum, Math.max(1, Math.floor(requestedSeconds))) : 10;
+  const expiresAt = new Date(Date.now() + seconds * 1000).toISOString();
+  const { error } = await createAdminClient().from("site_settings").upsert([
+    { key: "active_effect", value: effect, is_public: true }, { key: "effect_expires_at", value: expiresAt, is_public: true },
+  ]);
+  if (error) throw new Error(`演出を開始できませんでした: ${error.message}`);
+  publicContentChanged(); revalidatePath("/admin/settings");
 }

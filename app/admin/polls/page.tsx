@@ -3,6 +3,7 @@ import { AdminPageHeader } from "@/components/admin/page-header";
 import { createAdminClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
+function localDateTime(value: string | null) { return value ? new Date(value).toISOString().slice(0, 16) : ""; }
 
 export default async function PollsAdminPage() {
   const client = createAdminClient();
@@ -23,6 +24,8 @@ export default async function PollsAdminPage() {
         <label className="checkbox"><input name="is_published" type="checkbox" defaultChecked />公開する</label>
         <label className="checkbox"><input name="is_open" type="checkbox" defaultChecked />受付を開始する</label>
         <label className="checkbox"><input name="results_public" type="checkbox" defaultChecked />結果を公開する</label>
+        <label>受付開始（任意）<input name="opens_at" type="datetime-local" /></label>
+        <label>受付終了（任意）<input name="closes_at" type="datetime-local" /></label>
       </div><div className="form-actions"><button type="submit">投票を作成</button></div></form>
     </section>
     <section className="admin-section"><h2>既存の投票</h2><div className="admin-list">
@@ -33,6 +36,8 @@ export default async function PollsAdminPage() {
           <label className="checkbox"><input name="is_published" type="checkbox" defaultChecked={poll.is_published} />公開</label>
           <label className="checkbox"><input name="is_open" type="checkbox" defaultChecked={poll.is_open} />受付中</label>
           <label className="checkbox"><input name="results_public" type="checkbox" defaultChecked={poll.results_public} />結果公開</label>
+          <label>開始<input name="opens_at" type="datetime-local" defaultValue={localDateTime(poll.opens_at)} /></label>
+          <label>終了<input name="closes_at" type="datetime-local" defaultValue={localDateTime(poll.closes_at)} /></label>
           <button type="submit">状態を更新</button>
         </form>
         <form action={deletePoll} className="row-actions"><input type="hidden" name="id" value={poll.id} /><button className="danger" type="submit">削除</button></form>

@@ -1,5 +1,5 @@
 import { AdminPageHeader } from "@/components/admin/page-header";
-import { updateSiteSettings } from "@/app/admin/actions";
+import { triggerSiteEffect, updateSiteBackground, updateSiteSettings } from "@/app/admin/actions";
 import { createAdminClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -27,6 +27,8 @@ export default async function SettingsPage() {
           <div className="form-actions"><button type="submit">保存</button></div>
         </form>
       </section>
+      <section className="admin-section"><h2>期限付き背景</h2><p className="muted">教祖は最大1時間、ADMINは最大6時間です。</p><form action={updateSiteBackground} encType="multipart/form-data"><div className="form-grid"><label>背景画像<input name="background_file" type="file" accept="image/jpeg,image/png,image/webp" required /></label><label>表示時間（分）<input name="duration_minutes" type="number" min="1" max="360" defaultValue="60" /></label></div><div className="form-actions"><button type="submit">背景を設定</button></div></form></section>
+      <section className="admin-section"><h2>特別演出</h2><p className="muted">教祖とADMINのみ実行できます。クラッカーまたは絵文字が画面上に降ります。</p><form action={triggerSiteEffect}><div className="form-grid"><label>演出<select name="effect" defaultValue="cracker"><option value="cracker">クラッカー</option><option value="emoji">絵文字</option></select></label><label>表示秒数（教祖最大60秒）<input name="duration_seconds" type="number" min="1" max="360" defaultValue="10" /></label></div><div className="form-actions"><button type="submit">演出開始</button></div></form></section>
     </>
   );
 }

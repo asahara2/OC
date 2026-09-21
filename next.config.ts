@@ -6,9 +6,16 @@ const nextConfig: NextConfig = {
   typescript: { tsconfigPath: process.env.OC_UI_TEST === "1" ? "tests/ui/tsconfig.json" : "tsconfig.json" },
   poweredByHeader: false,
   reactStrictMode: true,
+
+  // Server Actions のリクエストサイズ上限
+  experimental: {
+    serverActions: { bodySizeLimit: "25mb" },
+  },
+
   // Keeps Vercel/Next file tracing scoped to this repository when a parent
   // directory happens to contain another JavaScript lockfile.
   outputFileTracingRoot: process.cwd(),
+
   async headers() {
     return [
       {

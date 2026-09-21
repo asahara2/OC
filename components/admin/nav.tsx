@@ -3,7 +3,7 @@ import type { StaffPermission } from "@/lib/staff-auth";
 
 const links = [
   ["概要", "/admin", null],
-  ["サイト設定", "/admin/settings", null],
+  ["サイト設定", "/admin/settings", "media_manage"],
   ["ニュース", "/admin/news", "news_write"],
   ["憲章", "/admin/constitution", "constitution_write"],
   ["リアルタイム投票", "/admin/polls", "poll_manage"],

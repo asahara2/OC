@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const staff = parseStaffSessionCookie(request.cookies.get(staffCookieName)?.value);
-  const staffPaths = ["/admin/news", "/admin/constitution", "/admin/polls", "/admin/messages"];
+  const staffPaths = ["/admin/news", "/admin/constitution", "/admin/polls", "/admin/messages", "/admin/settings"];
   if (staff && staffPaths.some((path) => request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(`${path}/`))) return;
 
   return adminAuthenticationResponse();
