@@ -365,6 +365,31 @@ export async function updateSiteBackground(formData: FormData) {
   publicContentChanged(); revalidatePath("/admin/settings");
 }
 
+export async function updateHeroImage(formData: FormData) {
+  await requireFounderOrAdmin();
+  const url = formValue(formData, "hero_image_url").trim();
+  const image = formData.get("hero_image_file");
+  let imageUrl = url;
+  if (image instanceof File && image.size > 0) {
+    if (image.size > 8 * 1024 * 1024 || !["image/jpeg", "image/png", "image/webp", "image/gif"].includes(image.type)) {
+      throw new Error("JPEG、PNG、WebP、GIFの8MB以下の画像を選択してください。");
+    }
+    const extension = image.type === "image/jpeg" ? "jpg" : image.type.split("/")[1];
+    const storage = await ensurePublicBucket("site-backgrounds");
+    const path = `hero/${randomUUID()}.${extension}`;
+    const uploaded = await storage.upload(path, image, { contentType: image.type, upsert: false });
+    if (uploaded.error) throw new Error(`ヘッダー画像をアップロードできませんでした: ${uploaded.error.message}`);
+    imageUrl = storage.getPublicUrl(path).data.publicUrl;
+  }
+  if (imageUrl) {
+    try { new URL(imageUrl); } catch { throw new Error("ヘッダー画像URLの形式が正しくありません。"); }
+  }
+  const { error } = await createAdminClient().from("site_settings").upsert({ key: "hero_image_url", value: imageUrl, is_public: true });
+  if (error) throw new Error(`ヘッダー画像を保存できませんでした: ${error.message}`);
+  publicContentChanged();
+  revalidatePath("/admin/settings");
+}
+
 export async function triggerSiteEffect(formData: FormData) {
   const session = await requireFounderOrAdmin();
   const effect = formValue(formData, "effect");

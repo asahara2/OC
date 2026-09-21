@@ -7,6 +7,7 @@ import { formatDate } from "@/lib/content";
 
 type ClassicHomeProps = {
   identity: { name: string; description: string; email: string };
+  heroImageUrl: string;
   news: NewsItem[];
   leaders: PublicLeader[];
   articles: ConstitutionArticle[];
@@ -20,10 +21,10 @@ const menuCards = [
   ["お問い合わせ", "共同体へのご連絡はこちら", "#contact"],
 ] as const;
 
-export function ClassicHomeExperience({ identity, news, leaders, articles, polls }: ClassicHomeProps) {
+export function ClassicHomeExperience({ identity, heroImageUrl, news, leaders, articles, polls }: ClassicHomeProps) {
   const lead = leaders[0];
   return <div className="classic-home">
-    <section className="classic-hero"><div className="classic-container classic-hero-inner"><div><p className="classic-kicker">おっぱい共同体</p><h1>{identity.name}</h1><p>{identity.description}</p><div className="classic-hero-actions"><Link href="/constitution">共同体について</Link><Link href="/polls">投票に参加する</Link></div></div><div className="classic-seal" aria-hidden="true">OC<span>共同体</span></div></div></section>
+    <section className="classic-hero"><div className="classic-container classic-hero-inner"><div><p className="classic-kicker">おっぱい共同体</p><h1>{identity.name}</h1><p>{identity.description}</p><div className="classic-hero-actions"><Link href="/constitution">共同体について</Link><Link href="/polls">投票に参加する</Link></div></div><div className="classic-hero-media">{heroImageUrl ? <img src={heroImageUrl} alt="共同体のヘッダー画像" /> : <div className="classic-seal" aria-hidden="true">OC<span>共同体</span></div>}</div></div></section>
     <section className="classic-container classic-alerts"><div className="classic-section-title"><span>重要なお知らせ</span><Link href="/news">一覧を見る</Link></div>{news.slice(0, 3).map((item) => <Link className="classic-alert" href={`/news/${item.slug}`} key={item.id}><time dateTime={item.published_at ?? undefined}>{formatDate(item.published_at)}</time><strong>{item.title}</strong><span>›</span></Link>)}{news.length === 0 ? <p className="classic-muted">現在、お知らせはありません。</p> : null}</section>
     <section className="classic-container classic-intro"><p className="classic-kicker">共同体のご案内</p><h2>くだらないものを、<br />本気で。</h2><p>おっぱい共同体は、自由・平等・平和・ユーモアを基本に、創作、議論、技術、娯楽を楽しむ自主的な共同体です。小さな発想を大切にし、誰もが自分の問いを持ち寄れる場所を目指しています。</p><Link className="classic-more" href="/constitution">憲章を読む　›</Link></section>
     <section className="classic-container classic-menu"><div className="classic-section-title"><span>共同体メニュー</span></div><div className="classic-card-grid">{menuCards.map(([title, text, href]) => <Link className="classic-card" href={href} key={href}><span className="classic-card-mark">●</span><h3>{title}</h3><p>{text}</p><span className="classic-more">詳しく見る　›</span></Link>)}</div></section>

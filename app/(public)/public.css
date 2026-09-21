@@ -376,12 +376,15 @@
 .public-site-immersive .oc-wordmark, .public-site-immersive .oc-navigation > a, .public-site-immersive .oc-nav-share { color: #f2e7ef !important; }
 .public-site-immersive .oc-navigation > a:hover, .public-site-immersive .oc-nav-share:hover { color: #f0b5d0 !important; }
 .classic-contact a { color: #fff !important; }
+.classic-hero-media { display: grid; place-items: center; width: min(42vw, 430px); height: min(28vw, 300px); min-height: 220px; overflow: hidden; border: 1px solid #a7836d66; background: #eadbce; box-shadow: 0 20px 50px #67452b1c; }
+.classic-hero-media img { width: 100%; height: 100%; object-fit: cover; }
 @media (max-width: 760px) {
   .classic-hero { padding: 120px 0 75px; }
   .classic-hero-inner, .classic-columns { display: block; }
   .classic-seal { width: 120px; height: 120px; margin: 45px auto 0; font-size: 32px; }
   .classic-card-grid { grid-template-columns: repeat(2, 1fr); }
   .classic-leader-card { margin-top: 35px; }
+  .classic-hero-media { width: 100%; height: 240px; min-height: 0; margin: 45px auto 0; }
   .classic-poll { display: block; }
   .classic-poll .classic-outline { display: inline-block; margin-top: 12px; }
   .classic-alert { grid-template-columns: 1fr 18px; gap: 8px; }

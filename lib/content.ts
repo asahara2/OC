@@ -8,6 +8,7 @@ export type PublicSettings = {
   constitutionPreamble: string;
   backgroundUrl: string;
   backgroundExpiresAt: string | null;
+  heroImageUrl: string;
   activeEffect: "cracker" | "emoji" | null;
   effectExpiresAt: string | null;
   siteMode: "classic" | "immersive";
@@ -20,6 +21,7 @@ const defaults: PublicSettings = {
   constitutionPreamble: "",
   backgroundUrl: "",
   backgroundExpiresAt: null,
+  heroImageUrl: "",
   activeEffect: null,
   effectExpiresAt: null,
   siteMode: "classic",
@@ -47,6 +49,7 @@ export async function getPublicSettings(): Promise<PublicSettings> {
     contactEmail: settingString(values.get("contact_email"), defaults.contactEmail),
     constitutionPreamble: settingString(values.get("constitution_preamble"), defaults.constitutionPreamble),
     backgroundUrl, backgroundExpiresAt: backgroundUrl ? backgroundExpiresAt : null,
+    heroImageUrl: settingString(values.get("hero_image_url"), defaults.heroImageUrl),
     activeEffect: effect === "cracker" || effect === "emoji" ? effect : null,
     effectExpiresAt: effect ? effectExpiresAt : null,
     siteMode,
