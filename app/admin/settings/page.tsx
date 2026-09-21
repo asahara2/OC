@@ -1,6 +1,7 @@
 import { AdminPageHeader } from "@/components/admin/page-header";
-import { triggerSiteEffect, updateSiteBackground, updateSiteSettings } from "@/app/admin/actions";
+import { triggerSiteEffect, updateSiteBackground, updateSiteMode, updateSiteSettings } from "@/app/admin/actions";
 import { createAdminClient } from "@/lib/supabase/server";
+import { getStaffSession } from "@/lib/staff-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -12,15 +13,18 @@ export default async function SettingsPage() {
   const { data, error } = await createAdminClient().from("site_settings").select("key, value");
   if (error) throw new Error(`サイト設定を読み込めませんでした: ${error.message}`);
   const settings = new Map((data ?? []).map((row) => [row.key, stringValue(row.value)]));
+  const staffSession = await getStaffSession();
+  const isKyoso = staffSession?.role === "kyoso";
 
   return (
     <>
       <AdminPageHeader title="サイト設定" />
+      <section className="admin-section"><h2>ホームページ表示</h2><p className="muted">教祖・ADMINのみ変更できます。</p><form action={updateSiteMode}><label>表示モード<select name="site_mode" defaultValue={settings.get("site_mode") === "classic" ? "classic" : "immersive"}><option value="classic">一般的な宗教ホームページ</option><option value="immersive">現在の没入型デザイン</option></select></label><div className="form-actions"><button type="submit">表示モードを保存</button></div></form></section>
       <section className="admin-section">
         <form action={updateSiteSettings}>
           <div className="form-grid">
             <label>サイト名<input name="site_name" required maxLength={200} defaultValue={settings.get("site_name")} /></label>
-            <label>お問い合わせメール<input name="contact_email" type="email" maxLength={2000} defaultValue={settings.get("contact_email")} /></label>
+            {!isKyoso ? <label>お問い合わせメール（ADMINのみ）<input name="contact_email" type="email" maxLength={2000} defaultValue={settings.get("contact_email")} /></label> : <input type="hidden" name="contact_email" value={settings.get("contact_email") ?? ""} />}
             <label className="full">サイト説明<textarea name="site_description" maxLength={2000} defaultValue={settings.get("site_description")} /></label>
             <label className="full">憲章 前文<textarea name="constitution_preamble" maxLength={8000} rows={10} defaultValue={settings.get("constitution_preamble")} /></label>
           </div>

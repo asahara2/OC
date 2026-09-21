@@ -370,3 +370,12 @@ export async function triggerSiteEffect(formData: FormData) {
   if (error) throw new Error(`演出を開始できませんでした: ${error.message}`);
   publicContentChanged(); revalidatePath("/admin/settings");
 }
+
+export async function updateSiteMode(formData: FormData) {
+  await requireFounderOrAdmin();
+  const mode = formValue(formData, "site_mode");
+  if (mode !== "classic" && mode !== "immersive") throw new Error("表示モードが正しくありません。");
+  const { error } = await createAdminClient().from("site_settings").upsert({ key: "site_mode", value: mode, is_public: true });
+  if (error) throw new Error(`表示モードを保存できませんでした: ${error.message}`);
+  publicContentChanged(); revalidatePath("/admin/settings");
+}

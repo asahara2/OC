@@ -10,6 +10,7 @@ export type PublicSettings = {
   backgroundExpiresAt: string | null;
   activeEffect: "cracker" | "emoji" | null;
   effectExpiresAt: string | null;
+  siteMode: "classic" | "immersive";
 };
 
 const defaults: PublicSettings = {
@@ -21,6 +22,7 @@ const defaults: PublicSettings = {
   backgroundExpiresAt: null,
   activeEffect: null,
   effectExpiresAt: null,
+  siteMode: "immersive",
 };
 
 function settingString(value: unknown, fallback: string) {
@@ -38,6 +40,7 @@ export async function getPublicSettings(): Promise<PublicSettings> {
   const now = Date.now();
   const backgroundUrl = backgroundExpiresAt && new Date(backgroundExpiresAt).getTime() > now ? settingString(values.get("background_url"), "") : "";
   const effect = effectExpiresAt && new Date(effectExpiresAt).getTime() > now ? settingString(values.get("active_effect"), "") : "";
+  const siteMode = settingString(values.get("site_mode"), defaults.siteMode) === "classic" ? "classic" : "immersive";
   return {
     siteName: settingString(values.get("site_name"), defaults.siteName),
     siteDescription: settingString(values.get("site_description"), defaults.siteDescription),
@@ -46,6 +49,7 @@ export async function getPublicSettings(): Promise<PublicSettings> {
     backgroundUrl, backgroundExpiresAt: backgroundUrl ? backgroundExpiresAt : null,
     activeEffect: effect === "cracker" || effect === "emoji" ? effect : null,
     effectExpiresAt: effect ? effectExpiresAt : null,
+    siteMode,
   };
 }
 

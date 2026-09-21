@@ -14,7 +14,7 @@ export default async function PublicLayout({ children }: Readonly<{ children: Re
   const [settings, messages] = await Promise.all([getPublicSettings(), listPublicMessages()]);
   const identity = publicIdentity(settings);
   return (
-    <div className="public-site" id="top">
+    <div className={`public-site public-site-${settings.siteMode}`} id="top">
       <a className="oc-skip" href="#main-content">本文へスキップ</a>
       <SiteVisuals settings={settings} />
       <SiteHeader siteName={identity.displayName} />
