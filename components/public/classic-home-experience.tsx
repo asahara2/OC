@@ -16,9 +16,10 @@ type ClassicHomeProps = {
 
 const menuCards = [
   ["共同体について", "おっぱい共同体の理念と歩み", "/constitution"],
-  ["共同体の人々", "教祖・役職者・活動する人々", "/leaders"],
+  ["思想と文化", "自由・平等・平和・ユーモア", "/constitution"],
   ["参加する", "投票や日々の活動に参加する", "/polls"],
-  ["お問い合わせ", "共同体へのご連絡はこちら", "#contact"],
+  ["活動する", "ニュースと共同体の記録", "/news"],
+  ["よくある質問", "はじめての方はこちら", "#faq"],
 ] as const;
 
 export function ClassicHomeExperience({ identity, heroImageUrl, news, leaders, articles, polls }: ClassicHomeProps) {
@@ -31,7 +32,7 @@ export function ClassicHomeExperience({ identity, heroImageUrl, news, leaders, a
     <section className="classic-band"><div className="classic-container classic-columns"><div><p className="classic-kicker">指導者</p><h2>共同体を導く人々</h2><p>それぞれの視点から、共同体の問いと活動を支えます。</p><Link className="classic-more" href="/leaders">指導者を見る　›</Link></div><div className="classic-leader-card">{lead?.image_url ? <img src={lead.image_url} alt="" /> : <div className="classic-leader-placeholder">OC</div>}<div><p>{lead?.role?.name ?? "共同体"}</p><h3>{lead?.name ?? "現在、公開中の指導者はいません"}</h3></div></div></div></section>
     <section className="classic-container classic-poll"><div><p className="classic-kicker">共同体の声</p><h2>現在の投票</h2>{polls[0] ? <><h3>{polls[0].title}</h3><p>{polls[0].description}</p></> : <p className="classic-muted">現在、公開中の投票はありません。</p>}</div><Link className="classic-outline" href="/polls">投票ページへ　›</Link></section>
     <section className="classic-container classic-constitution"><div className="classic-section-title"><span>憲章から</span><Link href="/constitution">全文を見る</Link></div>{articles.slice(0, 3).map((article) => <article key={article.id}><span>第{article.article_number}条</span><h3>{article.title}</h3><p>{article.content}</p></article>)}</section>
-    <section className="classic-container classic-faq"><p className="classic-kicker">よくある質問</p><h2>はじめての方へ</h2><details><summary>おっぱい共同体とは何ですか？</summary><p>自由に考え、語り、創造するためのインターネット上の自主的な共同体です。</p></details><details><summary>参加に費用はかかりますか？</summary><p>参加を理由に不合理な金銭の提供を求めることはありません。</p></details></section>
+    <section className="classic-container classic-faq" id="faq"><p className="classic-kicker">よくある質問</p><h2>はじめての方へ</h2><details><summary>おっぱい共同体とは何ですか？</summary><p>自由に考え、語り、創造するためのインターネット上の自主的な共同体です。</p></details><details><summary>参加に費用はかかりますか？</summary><p>参加を理由に不合理な金銭の提供を求めることはありません。</p></details></section>
     <section className="classic-contact" id="contact"><div className="classic-container"><p className="classic-kicker">お問い合わせ</p><h2>共同体について、<br />お気軽にご連絡ください。</h2><a href={`mailto:${identity.email}`}>{identity.email}　›</a></div></section>
   </div>;
 }

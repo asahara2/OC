@@ -378,6 +378,26 @@
 .classic-contact a { color: #fff !important; }
 .classic-hero-media { display: grid; place-items: center; width: min(42vw, 430px); height: min(28vw, 300px); min-height: 220px; overflow: hidden; border: 1px solid #a7836d66; background: #eadbce; box-shadow: 0 20px 50px #67452b1c; }
 .classic-hero-media img { width: 100%; height: 100%; object-fit: cover; }
+.public-site-classic .oc-header { box-shadow: 0 1px 0 #6e513d12; }
+.public-site-classic .oc-wordmark { color: #563f31; }
+.public-site-classic .oc-wordmark small { color: #947665; }
+.public-site-classic .oc-navigation > a { color: #5c493d; }
+.public-site-classic .oc-navigation > a:not(.oc-nav-join)::after { background: #9a6f55; }
+.classic-hero { position: relative; overflow: hidden; }
+.classic-hero::before { content: ""; position: absolute; inset: 0; opacity: .2; pointer-events: none; background: linear-gradient(90deg, transparent 0 49%, #a17a5b 49.1%, transparent 49.2%), linear-gradient(#a17a5b 0 1px, transparent 1px 100%); background-size: 50% 100%, 100% 70px; mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent); }
+.classic-hero-inner { position: relative; }
+.classic-hero h1 { font-weight: 500; color: #3e332d; }
+.classic-hero-media { border-radius: 1px; }
+.classic-alerts { position: relative; }
+.classic-alerts::before { content: "NEWS"; position: absolute; top: 38px; right: 0; color: #b08a70; font-size: 10px; letter-spacing: .24em; }
+.classic-section-title { border-bottom-width: 1px; }
+.classic-section-title > span { letter-spacing: .12em; }
+.classic-card-grid { grid-template-columns: repeat(5, 1fr); }
+.classic-card { min-height: 225px; padding: 30px 20px; transition: transform .25s, border-color .25s, box-shadow .25s; }
+.classic-card:hover { box-shadow: 0 12px 28px #6c4d2720; }
+.classic-card-mark { font-size: 10px; }
+.classic-band { border-block: 1px solid #e2d4c8; }
+.classic-contact { background: #5d493e; }
 @media (max-width: 760px) {
   .classic-hero { padding: 120px 0 75px; }
   .classic-hero-inner, .classic-columns { display: block; }
