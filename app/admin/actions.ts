@@ -30,8 +30,15 @@ async function ensurePublicBucket(name: string) {
   const storage = createAdminClient().storage;
   const listed = await storage.listBuckets();
   if (!listed.error && listed.data.some((bucket) => bucket.name === name)) return storage.from(name);
+  // Some Supabase projects deny listBuckets even to otherwise usable service
+  // keys. In that case use the bucket directly; upload will provide the useful
+  // permission error if it is genuinely unavailable.
+  if (listed.error) return storage.from(name);
   const created = await storage.createBucket(name, { public: true });
-  if (created.error && !created.error.message.toLowerCase().includes("already exists")) throw new Error(`Storageバケットを作成できませんでした: ${created.error.message}`);
+  const createMessage = created.error?.message.toLowerCase() ?? "";
+  if (created.error && !createMessage.includes("already exists") && !createMessage.includes("already exist") && !createMessage.includes("duplicate")) {
+    throw new Error(`Storageバケットを作成できませんでした: ${created.error.message}`);
+  }
   return storage.from(name);
 }
 
