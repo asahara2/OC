@@ -38,10 +38,10 @@ export function OriginExperience() {
     } catch { supported = false; }
     if (!supported) setFailed(true);
     else {
-      const hardware = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
-      const coarse = window.matchMedia("(pointer: coarse)").matches;
-      const low = hardware.connection?.saveData || (hardware.deviceMemory ?? 8) <= 4 || (hardware.hardwareConcurrency ?? 8) <= 4;
-      setQuality(low ? "low" : coarse || window.innerWidth < 1100 ? "medium" : "high");
+      // Keep the same visual quality on touch devices and desktop. The
+      // renderer still has its normal context-loss fallback if a device
+      // cannot provide WebGL at this quality.
+      setQuality("high");
     }
     return () => preference.removeEventListener("change", syncMotion);
   }, []);
