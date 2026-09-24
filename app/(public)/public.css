@@ -398,6 +398,16 @@
 .classic-card-mark { font-size: 10px; }
 .classic-band { border-block: 1px solid #e2d4c8; }
 .classic-contact { background: #5d493e; }
+.classic-records { padding: 82px 0 92px; background: #f1e9e1; border-block: 1px solid #e1d4c8; }
+.classic-record-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 28px; }
+.classic-record-card { overflow: hidden; color: #40342e; background: #fffdf9; border: 1px solid #dfd1c5; box-shadow: 0 8px 24px #72553b12; transition: transform .25s, box-shadow .25s; }
+.classic-record-card:hover { transform: translateY(-4px); box-shadow: 0 14px 32px #72553b22; }
+.classic-record-image { display: grid; place-items: center; height: 165px; overflow: hidden; background: linear-gradient(135deg, #d4b9a3, #8c6857); color: #fff7ef; font-size: 34px; letter-spacing: .15em; }
+.classic-record-image img { width: 100%; height: 100%; object-fit: cover; }
+.classic-record-body { padding: 17px 19px 20px; }
+.classic-record-body time { color: #9a7a67; font-size: 11px; }
+.classic-record-body h3 { margin: 9px 0 15px; font-size: 16px; line-height: 1.7; font-weight: 600; }
+.classic-record-body span { color: #795b48; font-size: 12px; }
 @media (max-width: 760px) {
   .classic-hero { padding: 120px 0 75px; }
   .classic-hero-inner, .classic-columns { display: block; }
@@ -406,6 +416,7 @@
   .classic-leader-card { margin-top: 35px; }
   .classic-hero-media { width: 100%; height: 240px; min-height: 0; margin: 45px auto 0; }
   .classic-poll { display: block; }
+  .classic-record-grid { grid-template-columns: 1fr; }
   .classic-poll .classic-outline { display: inline-block; margin-top: 12px; }
   .classic-alert { grid-template-columns: 1fr 18px; gap: 8px; }
   .classic-alert time { grid-column: 1 / -1; }
