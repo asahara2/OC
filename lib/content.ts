@@ -32,9 +32,16 @@ function settingString(value: unknown, fallback: string) {
 }
 
 export async function getPublicSettings(): Promise<PublicSettings> {
-  const supabase = createPublicClient();
-  const { data, error } = await supabase.from("site_settings").select("key, value").eq("is_public", true);
-  if (error) throw new Error(`Unable to load site settings: ${error.message}`);
+  let data: { key: string; value: unknown }[] | null = null;
+  try {
+    const result = await createPublicClient().from("site_settings").select("key, value").eq("is_public", true);
+    if (result.error) return { ...defaults };
+    data = result.data;
+  } catch {
+    // Keep the public shell available while deployment configuration or the
+    // database connection is recovering. Administrative routes still error.
+    return { ...defaults };
+  }
 
   const values = new Map((data ?? []).map((setting) => [setting.key, setting.value]));
   const backgroundExpiresAt = settingString(values.get("background_expires_at"), "") || null;
@@ -57,81 +64,86 @@ export async function getPublicSettings(): Promise<PublicSettings> {
 }
 
 export async function listPublishedNews(limit?: number): Promise<NewsItem[]> {
-  const supabase = createPublicClient();
-  let query = supabase.from("news").select("*").eq("is_published", true).order("published_at", { ascending: false });
-  if (limit) query = query.limit(limit);
-  const { data, error } = await query;
-  if (error) throw new Error(`Unable to load news: ${error.message}`);
-  return data ?? [];
+  try {
+    const supabase = createPublicClient();
+    let query = supabase.from("news").select("*").eq("is_published", true).order("published_at", { ascending: false });
+    if (limit) query = query.limit(limit);
+    const { data, error } = await query;
+    return error ? [] : data ?? [];
+  } catch { return []; }
 }
 
 export async function getPublishedNewsBySlug(slug: string): Promise<NewsItem | null> {
-  const supabase = createPublicClient();
-  const { data, error } = await supabase
-    .from("news")
-    .select("*")
-    .eq("slug", slug)
-    .eq("is_published", true)
-    .maybeSingle();
-  if (error) throw new Error(`Unable to load news item: ${error.message}`);
-  return data;
+  try {
+    const { data, error } = await createPublicClient()
+      .from("news")
+      .select("*")
+      .eq("slug", slug)
+      .eq("is_published", true)
+      .maybeSingle();
+    return error ? null : data;
+  } catch { return null; }
 }
 
 export type PublicLeader = Leader & { role: Pick<Role, "name" | "slug"> | null };
 
 export async function listPublicLeaders(): Promise<PublicLeader[]> {
-  const supabase = createPublicClient();
-  const { data, error } = await supabase
-    .from("leaders")
-    .select("*, role:roles(name, slug)")
-    .eq("is_active", true)
-    .order("display_order", { ascending: true })
-    .order("name", { ascending: true });
-  if (error) throw new Error(`Unable to load leaders: ${error.message}`);
-  return (data ?? []).filter((leader) => leader.role?.slug !== "mod" || leader.mod_leader_approved) as PublicLeader[];
+  try {
+    const { data, error } = await createPublicClient()
+      .from("leaders")
+      .select("*, role:roles(name, slug)")
+      .eq("is_active", true)
+      .order("display_order", { ascending: true })
+      .order("name", { ascending: true });
+    if (error) return [];
+    return (data ?? []).filter((leader) => leader.role?.slug !== "mod" || leader.mod_leader_approved) as PublicLeader[];
+  } catch { return []; }
 }
 
 export async function listPublishedConstitution(): Promise<ConstitutionArticle[]> {
-  const supabase = createPublicClient();
-  const { data, error } = await supabase
-    .from("constitution_articles")
-    .select("*")
-    .eq("is_published", true)
-    .order("display_order", { ascending: true })
-    .order("article_number", { ascending: true });
-  if (error) throw new Error(`Unable to load constitution: ${error.message}`);
-  return data ?? [];
+  try {
+    const { data, error } = await createPublicClient()
+      .from("constitution_articles")
+      .select("*")
+      .eq("is_published", true)
+      .order("display_order", { ascending: true })
+      .order("article_number", { ascending: true });
+    return error ? [] : data ?? [];
+  } catch { return []; }
 }
 
 export type PublicPoll = Poll & { options: PollOption[] };
 
 /** Public polls never require Supabase Auth. A browser cookie is used only to prevent repeat votes. */
 export async function listPublicPolls(): Promise<PublicPoll[]> {
-  const supabase = createPublicClient();
-  const { data: polls, error } = await supabase
-    .from("polls")
-    .select("*")
-    .eq("is_published", true)
-    .order("created_at", { ascending: false });
-  // Optional feature: a site can deploy before the poll migration is applied.
-  // Keep the public homepage available and show the waiting state in that case.
-  if (error) return [];
-  const pollIds = (polls ?? []).map((poll) => poll.id);
-  if (pollIds.length === 0) return [];
-  const { data: options, error: optionError } = await supabase.from("poll_options").select("*").in("poll_id", pollIds).order("display_order");
-  if (optionError) return [];
-  return (polls ?? []).map((poll) => ({
-    ...poll,
-    options: (options ?? []).filter((option) => option.poll_id === poll.id),
-  }));
+  try {
+    const supabase = createPublicClient();
+    const { data: polls, error } = await supabase
+      .from("polls")
+      .select("*")
+      .eq("is_published", true)
+      .order("created_at", { ascending: false });
+    // Optional feature: a site can deploy before the poll migration is applied.
+    // Keep the public homepage available and show the waiting state in that case.
+    if (error) return [];
+    const pollIds = (polls ?? []).map((poll) => poll.id);
+    if (pollIds.length === 0) return [];
+    const { data: options, error: optionError } = await supabase.from("poll_options").select("*").in("poll_id", pollIds).order("display_order");
+    if (optionError) return [];
+    return (polls ?? []).map((poll) => ({
+      ...poll,
+      options: (options ?? []).filter((option) => option.poll_id === poll.id),
+    }));
+  } catch { return []; }
 }
 
 export async function listPublicMessages(): Promise<CommunityMessage[]> {
-  const { data, error } = await createPublicClient().from("community_messages").select("*").eq("is_published", true).order("created_at", { ascending: false }).limit(50);
-  // This is a progressive enhancement; do not take the entire public site down
-  // while a database migration is still being applied.
-  if (error) return [];
-  return data ?? [];
+  try {
+    const { data, error } = await createPublicClient().from("community_messages").select("*").eq("is_published", true).order("created_at", { ascending: false }).limit(50);
+    // This is a progressive enhancement; do not take the entire public site down
+    // while a database migration is still being applied.
+    return error ? [] : data ?? [];
+  } catch { return []; }
 }
 
 export function formatDate(value: string | null) {

@@ -1,5 +1,6 @@
 import { AdminPageHeader } from "@/components/admin/page-header";
 import { createLeader, deleteLeader, updateLeader } from "@/app/admin/actions";
+import { requireStaffPermission } from "@/lib/staff-auth";
 import { createAdminClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +10,7 @@ function RoleOptions({ roles, selectedId }: { roles: { id: string; name: string 
 }
 
 export default async function LeadersPage() {
+  await requireStaffPermission("leader_manage");
   const client = createAdminClient();
   const [{ data: leaders, error: leaderError }, { data: roles, error: roleError }] = await Promise.all([
     client.from("leaders").select("*").order("display_order").order("name"),

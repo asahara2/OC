@@ -18,8 +18,8 @@ function signature(value: string) { return createHmac("sha256", sessionSecret())
 type EnvStaffAccount = { id: string; role: "kyoso" | "mod"; password: string; permissions: StaffPermission[] };
 export function environmentStaffAccounts(): EnvStaffAccount[] {
   const specs = [
-    ["KYOSO", "kyoso", staffPermissions], ["MOD_01", "mod", ["news_write", "constitution_write", "poll_manage"]],
-    ["MOD_02", "mod", ["news_write", "constitution_write", "poll_manage"]], ["MOD_03", "mod", ["news_write", "constitution_write", "poll_manage"]],
+    ["KYOSO", "kyoso", staffPermissions], ["MOD_01", "mod", ["news_write", "constitution_write", "poll_manage", "leader_manage"]],
+    ["MOD_02", "mod", ["news_write", "constitution_write", "poll_manage", "leader_manage"]], ["MOD_03", "mod", ["news_write", "constitution_write", "poll_manage", "leader_manage"]],
   ] as const;
   return specs.flatMap(([prefix, role, basePermissions]) => {
     const id = process.env[`${prefix}_USERNAME`]; const password = process.env[`${prefix}_PASSWORD`];
